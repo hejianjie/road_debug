@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.ApplicationMapper">
+    <select id="selectOne" resultType="java.util.Map">
+        select *
+        from application
+        where application_id=#{applicationId}
+    </select>
+    <select id="selectByApplicationId" resultType="map">
+          select *
+        from application
+        where application_id=#{applicationId}
+    </select>
+    <select id="selectByRoadHazardId" resultType="java.util.Map">
+          select *
+        from application
+        where road_hazard=#{roadHazardId}
+    </select>
+    <select id="getStatus" resultType="java.lang.Integer">
+        select application.status
+        from application
+        where application.application_id = #{applicationId}
+    </select>
+    <select id="selectCityDeptUnderAudit" resultType="map">
+        with tmp as (  select application.status,application.application_id as applicationId,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName
+        from application,construct_type,sys_user,construct_project_detail construct_project_detail1,construct_project_detail construct_project_detail2
+        where application.type_selection=construct_type.construct_type_id
+        and application.applicant=sys_user.user_id
+        and application.project_name=construct_project_detail1.construct_project_detail_id
+        and application.detail_name=construct_project_detail2.construct_project_detail_id
+        and application.auditor_one_result='同意'
+        and application.auditor_two_result='同意'
+        and application.type_selection!=2
+        and application.city_dept_head_status is null)
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.roadHazardId
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+
+
+        ORDER BY tmp.applyTime DESC
+<!--        <if test="role.equals('市区审核人1')">-->
+<!--            and application.auditor_one_result='同意' and application.auditor_two_result='同意' and application.city_auditor_one_status is null-->
+<!--        </if>-->
+<!--        <if test="role.equals('市区审核人2')">-->
+<!--            and application.auditor_one_result='同意' and application.auditor_two_result='同意' and application.city_auditor_two_status is null-->
+<!--        </if>-->
+<!--        <if test="role.equals('市区审核人3')">-->
+<!--            and application.auditor_one_result='同意' and application.auditor_two_result='同意' and application.city_auditor_three_status is null-->
+<!--        </if>-->
+<!--        <if test="role.equals('市区审核人4')">-->
+<!--            and application.auditor_one_result='同意' and application.auditor_two_result='同意' and application.city_auditor_four_status is null-->
+<!--        </if>-->
+    </select>
+
+    <select id="selectCityExecutiveUnderAudit" resultType="map">
+            				with tmp as (  select application.application_id as applicationId,application.status,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName from application,construct_type,sys_user,construct_project_detail construct_project_detail1,construct_project_detail construct_project_detail2
+     where application.type_selection=construct_type.construct_type_id and application.applicant=sys_user.user_id and application.project_name=construct_project_detail1.construct_project_detail_id
+     and application.detail_name=construct_project_detail2.construct_project_detail_id
+     and application.auditor_one_result='同意' and application.auditor_two_result='同意' and city_dept_head_status='同意' and application.city_executive_status is null)
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.roadHazardId
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+
+
+        ORDER BY tmp.applyTime DESC
+    </select>
+
+    <insert id="addOne">
+       insert into application(road_hazard,apply_time,applicant,type_selection,project_name,detail_name,organization_id,specific_size,work_amount,unit_price,unit_price_type,work_frequency,appraisal_cost,estimated_finish_time,estimated_finish_duration,status,dateTime)
+        values(#{roadHazardId},#{applyTime},#{userId},#{construct_type},#{construct_project},#{construct_project_detail},#{hazard_unit},#{specificSize},#{work_amount},#{unit_price},#{unit_price_type},#{work_frequency},#{appraisal_cost},#{date},#{estimated_finish_time},2,#{Time})
+    </insert>
+
+    <update id="updateCityDeptAuditResult">
+            <if test="auditSuggestion.equals('否决')">
+                update application set city_dept_head=#{userId}, city_dept_head_status=#{auditSuggestion},city_dept_head_fb=#{feedback},city_dept_head_time=#{auditDate},status=1 where application_id=${applicationId}
+            </if>
+<!--        <if test="role.equals('市区审核人1')">-->
+            <if test="auditSuggestion.equals('同意')">
+            update application set city_dept_head=#{userId}, city_dept_head_status=#{auditSuggestion},city_dept_head_fb=#{feedback},city_dept_head_time=#{auditDate},status=5 where application_id=${applicationId}
+            </if>
+        <if test="auditSuggestion.equals('待定')">
+            update application set city_dept_head=#{userId}, city_dept_head_status=#{auditSuggestion},city_dept_head_fb=#{feedback},city_dept_head_time=#{auditDate} where application_id=${applicationId}
+        </if>
+<!--        </if>-->
+
+<!--        <if test="role.equals('市区审核人2')">-->
+<!--            update application set city_auditor_two_status=#{auditSuggestion},city_second_fb=#{feedback},city_audito_date=#{auditDate} where application_id=${applicationId}-->
+<!--        </if>-->
+<!--        <if test="role.equals('市区审核人3')">-->
+<!--            update application set city_auditor_three_status=#{auditSuggestion},city_third_fb=#{feedback},city_audito_date=#{auditDate} where application_id=${applicationId}-->
+<!--        </if>-->
+<!--        <if test="role.equals('市区审核人4')">-->
+<!--            update application set city_auditor_four_status=#{auditSuggestion},city_fouth_fb=#{feedback},city_audito_date=#{auditDate} where application_id=${applicationId}-->
+<!--        </if>-->
+    </update>
+
+    <update id="updateCityExecutiveAuditResult">
+        <if test="auditSuggestion.equals('否决')">
+            update application set city_executive=#{userId}, city_executive_status=#{auditSuggestion},city_executive_fb=#{feedback},city_audito_date=#{auditDate},status=1 where application_id=${applicationId}
+        </if>
+        <if test="auditSuggestion.equals('同意')">
+            update application set city_executive=#{userId}, city_executive_status=#{auditSuggestion},city_executive_fb=#{feedback},city_audito_date=#{auditDate},status=6 where application_id=${applicationId}
+        </if>
+        <if test="auditSuggestion.equals('待定')">
+            update application set city_executive=#{userId}, city_executive_status=#{auditSuggestion},city_executive_fb=#{feedback},city_audito_date=#{auditDate} where application_id=${applicationId}
+        </if>
+    </update>
+
+    <update id="autoAuditAfterExeAudit">
+        update application  set supremo_status='同意',status=8,supremo_audit_date=#{auditDate} where appraisal_cost &lt;=#{limitMoney} and application_id=#{applicationId}
+    </update>
+
+    <select id="cityDeptAuditHistory" resultType="map">
+<!--        <if test="role.equals('市区审核人1')">-->
+
+        with tmp as (  select  application.city_dept_head_time,application.status,application.application_id as applicationId,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName
+        from application,construct_type,sys_user,construct_project_detail construct_project_detail1,construct_project_detail construct_project_detail2
+        where application.type_selection=construct_type.construct_type_id
+        and application.applicant=sys_user.user_id
+        and application.project_name=construct_project_detail1.construct_project_detail_id
+        and application.detail_name=construct_project_detail2.construct_project_detail_id
+        and application.auditor_one_result='同意'
+        and application.auditor_two_result='同意'
+        and application.type_selection!=2
+        and application.city_dept_head_status is not  null)
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.roadHazardId
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+
+
+        ORDER BY tmp.city_dept_head_time DESC
+<!--        </if>-->
+<!--        <if test="role.equals('市区审核人2')">-->
+<!--            select city_auditor_one_status AS status,city_second_fb as feedback,city_audito_date as auditDate from application where city_auditor_two_status is not null-->
+<!--        </if>-->
+<!--        <if test="role.equals('市区审核人3')">-->
+<!--            select city_auditor_one_status AS status,city_third_fb as feedback,city_audito_date as auditDate from application where city_auditor_three_status is not null-->
+<!--        </if>-->
+<!--        <if test="role.equals('市区审核人4')">-->
+<!--            select city_auditor_one_status as status,city_fouth_fb as feedback,city_audito_date as auditDate from application where city_auditor_four_status is not null-->
+<!--        </if>-->
+    </select>
+
+    <select id="cityExecutiveHistory" resultType="map">
+            with tmp as (  select  application.city_audito_date,application.status,application.application_id as applicationId,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName
+        from application,construct_type,sys_user,construct_project_detail construct_project_detail1,construct_project_detail construct_project_detail2
+        where application.type_selection=construct_type.construct_type_id
+        and application.applicant=sys_user.user_id
+        and application.project_name=construct_project_detail1.construct_project_detail_id
+        and application.detail_name=construct_project_detail2.construct_project_detail_id
+        and application.auditor_one_result='同意'
+        and application.auditor_two_result='同意'
+        and application.city_dept_head_status='同意'
+        and application.type_selection!=2
+        and application.city_executive_status is not  null)
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.roadHazardId
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+
+
+        ORDER BY tmp.city_audito_date DESC
+    </select>
+
+    <update id="firstAuditor">
+        update application
+        set first_auditor=#{firstAuditorId},first_auditor_result=#{firstAuditorResult}
+        where application_id=#{applicationId}
+    </update>
+
+    <update id="changeStatus">
+        update application
+        set status =#{status}
+        where application_id=#{applicationId}
+    </update>
+
+    <update id="countyAuditor">
+        <if test="role.equals('区县审核人1')">
+            <if test="auditorResult.equals('同意')">
+                update application
+                set auditor_one=#{auditorId},auditor_one_result=#{auditorResult},status=3,auditor_one_time = now()
+                where application_id=#{applicationId}
+            </if>
+            <if test="auditorResult.equals('待定')">
+                update application
+                set auditor_one=#{auditorId},auditor_one_result=#{auditorResult},auditor_one_time = now()
+                where application_id=#{applicationId}
+            </if>
+            <if test="auditorResult.equals('否决')">
+                update application
+                set auditor_one=#{auditorId},auditor_one_result=#{auditorResult},status=1,auditor_one_time = now()
+                where application_id=#{applicationId}
+            </if>
+        </if>
+        <if test="role.equals('区县审核人2')">
+            <if test="auditorResult.equals('同意')">
+                update application
+                set auditor_two=#{auditorId},auditor_two_result=#{auditorResult},status=4,auditor_two_time = now()
+                where application_id=#{applicationId}
+            </if>
+            <if test="auditorResult.equals('待定')">
+                update application
+                set auditor_two=#{auditorId},auditor_two_result=#{auditorResult},auditor_two_time = now()
+                where application_id=#{applicationId}
+            </if>
+            <if test="auditorResult.equals('否决')">
+                update application
+                set auditor_two=#{auditorId},auditor_two_result=#{auditorResult},status=1,auditor_two_time = now()
+                where application_id=#{applicationId}
+            </if>
+        </if>
+    </update>
+
+    <select id="ReffeAuditerUnderList" resultType="map">
+   				with tmp as (  select application.application_id as applicationId,application.status,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName from application,construct_type,sys_user,construct_project_detail construct_project_detail1,construct_project_detail construct_project_detail2
+     where application.status >=4 and application.type_selection=construct_type.construct_type_id and application.applicant=sys_user.user_id and application.type_selection!=2 and application.project_name=construct_project_detail1.construct_project_detail_id
+     and application.detail_name=construct_project_detail2.construct_project_detail_id and application.application_id not in
+         (  SELECT v_reff_audit_under_list.application_id FROM `v_reff_audit_under_list` WHERE v_reff_audit_under_list.user_id=#{userId}))
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.roadHazardId
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+
+
+        ORDER BY tmp.applyTime DESC
+    </select>
+
+    <select id="ReffAuditHistory" resultType="map">
+        	 with tmp as (  select application.application_id as applicationId,application.status,city_audit.reffaudit_time AS reffauditTime,city_audit.audit_status AS auditStatus,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName from application,city_audit,construct_type,sys_user,construct_project_detail construct_project_detail1,construct_project_detail construct_project_detail2
+     where application.status >=4 and application.application_id=city_audit.application_id AND city_audit.user_id=#{userId} AND application.type_selection=construct_type.construct_type_id and application.applicant=sys_user.user_id and application.type_selection!=2 and application.project_name=construct_project_detail1.construct_project_detail_id
+     and application.detail_name=construct_project_detail2.construct_project_detail_id and application.application_id  in
+         (  SELECT v_reff_audit_under_list.application_id FROM `v_reff_audit_under_list` WHERE v_reff_audit_under_list.user_id=#{userId}))
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.roadHazardId
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+
+
+        ORDER BY reffauditTime DESC
+    </select>
+
+    <insert id="insertAuditRecord">
+            insert into city_auditer (id, applicationId, user_id,
+        user_name, audit_status, auditfeedback,
+        reffaudit_time, audit_role)
+        values (#{id}, #{applicationId}, #{userId},
+        #{userName}, #{modifiedBy,jdbcType=INTEGER}, #{modifiedOn,jdbcType=TIMESTAMP},
+        #{subjectId,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="supremoUnderAuditList" resultType="map">
+        	with tmp as (  select application.application_id  as applicationId,application.status,application.appraisal_cost as appraisalCost,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName from application,construct_type,sys_user,construct_project_detail construct_project_detail1,construct_project_detail construct_project_detail2
+        where application.type_selection=construct_type.construct_type_id and application.applicant=sys_user.user_id and application.project_name=construct_project_detail1.construct_project_detail_id
+     and application.detail_name=construct_project_detail2.construct_project_detail_id
+     and application.auditor_one_result='同意' and application.auditor_two_result='同意' and city_dept_head_status='同意' and application.city_executive_status='同意' and supremo_status is null)
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.roadHazardId
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+
+
+        ORDER BY tmp.applyTime DESC
+    </select>
+
+    <update id="updateSupremoStatus">
+        <if test="status.equals('同意')">
+            update application set supremo_status=#{status},status=8,supremo_id=#{userId},supremo_audit_date=#{auditDate} where application_id=#{applicationId}
+        </if>
+        <if test="status.equals('否决')">
+            update application set supremo_status=#{status},status=1,supremo_id=#{userId},supremo_audit_date=#{auditDate} where application_id=#{applicationId}
+        </if>
+    </update>
+
+    <update id="supremoAutoAudit">
+        update application set supremo_status='同意',status=8,supremo_id=#{userId},supremo_audit_date=#{auditDate} where appraisal_cost &lt;=#{limitMoney} and city_dept_head_status='同意' and application.city_executive_status='同意' and supremo_status is null
+    </update>
+
+    <select id="supremoAuditHistory" resultType="map">
+        with tmp as (  select  application.supremo_audit_date,application.status,application.application_id as applicationId,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName
+        from application,construct_type,sys_user,construct_project_detail construct_project_detail1,construct_project_detail construct_project_detail2
+        where application.type_selection=construct_type.construct_type_id
+        and application.applicant=sys_user.user_id
+        and application.project_name=construct_project_detail1.construct_project_detail_id
+        and application.detail_name=construct_project_detail2.construct_project_detail_id
+        and application.auditor_one_result='同意'
+        and application.auditor_two_result='同意'
+        and application.city_dept_head_status='同意'
+        and application.type_selection!=2
+        and application.supremo_status is not  null)
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.roadHazardId
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+
+
+        ORDER BY tmp.supremo_audit_date DESC
+    </select>
+
+    <select id="selectHistory" resultType="map">
+select  *,construct_project.construct_project_name as projectName,construct_project_detail.construct_project_detail_name as detailName,construct_type.construct_type_name as typeName,road_section.name as  road_section_name
+from application left join construct_project on construct_project.construct_project_id = application.project_name
+								 left join construct_project_detail on construct_project_detail.construct_project_detail_id = application.detail_name
+								 left join construct_type on construct_type.construct_type_id = application.type_selection
+								  LEFT JOIN road_hazard on road_hazard.road_hazard_id = application.road_hazard
+                                LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+                                LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+                                LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+                                LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+                                LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+where application.applicant =#{userId}
+ORDER BY application.apply_time DESC
+    </select>
+    <select id="getApplyDate" resultType="map">
+        select  date_format(apply_time,'%Y-%m-%d %T') as applyDate from application where road_hazard = #{roadHazardId}
+    </select>
+
+    <delete id="deleteApplication">
+        delete from application where application_id=#{id}
+    </delete>
+    <select id="getView" resultType="java.util.Map">
+select construct_type.construct_type_name as construct_type,
+			 hazard_base_info.name as road_hazard_status,
+			 a.construct_project_detail_name as construct_project,
+			 b.construct_project_detail_name as construct_project_detail,
+			 hazard_unit.hazard_unit_name as hazard_unit,
+			 application.work_amount as work_amount,
+			 application.work_frequency as work_frequency,
+			 unit_price_type.unit_price_type_name as unit_price_type,
+			 c.name as applicant,
+			 d.name as auditor_one,
+			 e.name as auditor_two,
+			 f.name as city_dept_head,
+			 g.name as city_executive,
+			 application.work_amount,
+			 application.work_frequency,
+			 application.unit_price,
+			 application.appraisal_cost,
+			 application.estimated_finish_duration,
+			 application.estimated_finish_time,
+			 application.apply_time,
+			 application.auditor_one_time,
+			 application.auditor_two_time,
+			 application.city_dept_head_time,
+			 application.city_audito_date,
+			 application.city_dept_head_fb,
+			 application.city_executive_fb,
+			 application.specific_size
+from application left join construct_type on construct_type.construct_type_id =application.type_selection
+								 left join road_hazard on road_hazard.road_hazard_id =application.road_hazard
+								 left join hazard_base_info on hazard_base_info.info_id =road_hazard.hazard_status
+								 left join construct_project_detail as a on a.construct_project_detail_id =application.project_name
+								 left join construct_project_detail as b on b.construct_project_detail_id =application.detail_name
+								 left join hazard_unit on hazard_unit.hazard_unit_id=application.organization_id
+								 left join unit_price_type on unit_price_type.unit_price_type_id =application.unit_price_type
+								 left join sys_user as c on c.user_id = application.applicant
+								 left join sys_user as d on d.user_id = application.auditor_one
+								 left join sys_user as e on e.user_id = application.auditor_two
+								 left join sys_user as f on f.user_id = application.city_dept_head
+								 left join sys_user as g on g.user_id = application.city_executive
+where application.application_id =#{applicationId}
+    </select>
+</mapper>

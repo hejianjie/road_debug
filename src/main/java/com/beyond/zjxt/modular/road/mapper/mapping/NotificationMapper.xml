@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.NotificationMapper">
+    <select id="getAllNotification" resultType="java.util.Map">
+         with ntft as (
+        SELECT
+            DISTINCT SUBSTRING_INDEX(
+                SUBSTRING_INDEX(
+                   notification.forward_to,
+                    ',',
+                    b.help_topic_id + 1
+                ),
+                ',' ,- 1
+            ) forward_to ,notification.notification_id, title, content, publish_time, publisher,  status
+        FROM  notification left JOIN mysql.help_topic b ON   ( LENGTH(notification.forward_to) - LENGTH(REPLACE (notification.forward_to, ',', '')) + 1)> b.help_topic_id)
+
+        select ntft.notification_id, ntft.title, ntft.content, ntft.publish_time, ntft.publisher, ntft.status,sys_user.name,sys_dept.full_name,GROUP_CONCAT(sys_dept.full_name) as forward_to
+        from ntft  join sys_user on ntft.publisher=sys_user.user_id
+               left  join sys_dept on ntft.forward_to = sys_dept.dept_id
+        where ntft.title like concat('%', #{title}, '%') and ntft.publisher=#{uid}
+        <if test="beginTime !=null">
+            and ntft.publish_time >= #{beginTime}
+        </if>
+        <if test="endTime !=null">
+            and  #{endTime} >= ntft.publish_time
+        </if>
+        group by ntft.notification_id
+        order by ntft.publish_time desc
+    </select>
+    <select id="getDepartmentList" resultType="java.util.Map">
+        select dept_id ,full_name from sys_dept where pid=#{did}
+    </select>
+    <select id="getNotificationById" resultType="java.util.Map">
+        select title,content,forward_to from notification WHERE notification_id=#{id}
+    </select>
+    <select id="getMyNotification" resultType="java.util.Map">
+        with ntft as (
+        SELECT
+            DISTINCT SUBSTRING_INDEX(
+                SUBSTRING_INDEX(
+                   notification.forward_to,
+                    ',',
+                    b.help_topic_id + 1
+                ),
+                ',' ,- 1
+            ) forward_to ,notification.notification_id, title, content, publish_time, publisher,  status
+        FROM  notification  JOIN mysql.help_topic b ON   ( LENGTH(notification.forward_to) - LENGTH(REPLACE (notification.forward_to, ',', '')) + 1)> b.help_topic_id)
+
+        select ntft.*,sys_user.name
+        from ntft  join sys_user on ntft.publisher=sys_user.user_id
+        where forward_to=#{did} and ntft.title like concat('%', #{title}, '%') and ntft.status=1
+        <if test="beginTime !=null">
+            and ntft.publish_time >= #{beginTime}
+        </if>
+        <if test="endTime !=null">
+            and  #{endTime} >= ntft.publish_time
+        </if>
+        order by ntft.publish_time desc
+    </select>
+    <select id="getCurrentDepartment" resultType="java.util.Map">
+        select dept_id ,full_name from sys_dept where dept_id = #{did}
+    </select>
+    <insert id="insertNotification">
+        insert into
+        notification (title,
+        <if test="content !=null">
+         content,
+        </if>
+         publish_time,publisher,
+        <if test="forward_to !=null">
+         forward_to,
+        </if>
+         status)
+        values (#{title},
+        <if test="content !=null">
+        #{content},
+        </if>
+        now(),#{publisher},
+        <if test="forward_to !=null">
+        #{forward_to},
+        </if>
+        #{status})
+    </insert>
+    <update id="updateNotification">
+        update notification
+        <set>
+            <if test="title !=null">
+                title=#{title},
+            </if>
+            <if test="content !=null">
+                content=#{content},
+            </if>
+                publish_time=now(),
+            <if test="publisher !=null">
+                publisher=#{publisher},
+            </if>
+            <if test="forward_to !=null">
+                forward_to=#{forward_to},
+            </if>
+            <if test="status !=null">
+                status=#{status}
+            </if>
+        </set>
+        where notification_id=#{id}
+    </update>
+    <delete id="deleteNotification">
+        delete  from notification where notification_id=#{id}
+    </delete>
+</mapper>

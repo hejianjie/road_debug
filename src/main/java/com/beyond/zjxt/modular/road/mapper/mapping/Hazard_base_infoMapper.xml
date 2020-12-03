@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Hazard_base_infoMapper">
+    <select id="getById" resultType="java.util.Map">
+        select *
+        from hazard_base_info
+        where info_id=#{id}
+    </select>
+    <select id="getAll" resultType="java.util.Map">
+        select *
+        from hazard_base_info
+    </select>
+
+    <select id="hazardBaseInfoList" resultType="java.util.Map">
+        select *
+        from hazard_base_info
+        where name like concat('%',#{name},'%')
+    </select>
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Road_userMapper">
+    <select id="selectOne" resultType="java.util.Map">
+        select *
+        from sys_user
+        where user_id=#{userId}
+    </select>
+    <!--根据电话号码查是否已经有这个人了，有了则不能添加-->
+    <select id="selectByTelephone" resultType="com.beyond.zjxt.modular.road.entity.Road_user">
+       select * from road_user
+       where
+       telephone = #{telephone}
+   </select>
+    <!--根据账号名检查是否已经有这个人了，有了也不能创建相同的账号-->
+    <select id="selectByAccount" resultType="com.beyond.zjxt.modular.road.entity.Road_user">
+        select * from  road_user
+        where road_user.account = #{account}
+    </select>
+    <insert id="addRoadUser" useGeneratedKeys="true" parameterType="com.beyond.zjxt.modular.road.entity.Road_user">
+        insert into road_user(user_name,telephone,organization_id,account,password,status,role)
+        values(#{user_name},#{telephone},#{organization_id},#{account},#{password},#{status},#{role})
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="user_id">
+            SELECT LAST_INSERT_ID() AS user_id
+        </selectKey>
+    </insert>
+
+    <select id="selectAllInspector" resultType="java.util.Map">
+        select road_user.user_id,road_user.user_name,road_user.gender,road_user.age,road_user.telephone,road_user.account,road_user.status,supervisor.supervisor_name as organization_name
+        from road_user left join supervisor
+        on road_user.organization_id = supervisor.supervisor_id
+        where road_user.role="巡查员" and road_user.status != 2
+    </select>
+
+    <select id="selectInspectorByOrganizationId" resultType="java.util.Map">
+        select road_user.user_id,road_user.user_name,road_user.gender,road_user.age,road_user.telephone,road_user.account,road_user.status,supervisor.supervisor_name as organization_name
+        from road_user left join supervisor
+        on road_user.organization_id = supervisor.supervisor_id
+        where road_user.role="巡查员" and road_user.organization_id=#{organizationId} and road_user.status != 2
+    </select>
+
+    <update id="freezeInspector">
+        update road_user
+        set status=0
+        where user_id=#{roadUserId} and road_user.status != 2
+    </update>
+
+    <update id="thawInspector">
+        update road_user
+        set status=1
+        where user_id=#{roadUserId} and road_user.status != 2
+    </update>
+
+    <insert id="addInspector">
+        insert into road_user(user_name,gender,age,telephone,organization_id,account,password,status,role)
+        values(#{userName},#{gender},#{age},#{telephone},#{organization_id},#{account},#{password},1,"巡查员")
+    </insert>
+
+    <update id="updateInspector">
+        update road_user
+        <set>
+            user_name=#{userName},
+            gender=#{gender},
+            age=#{age},
+            telephone=#{telephone},
+            organization_id=#{organizationId},
+            account=#{account}
+        </set>
+        where user_id=#{roadUserId} and road_user.status != 2
+    </update>
+
+    <update id="deleteInspector">
+        update road_user
+        set status=2
+        where user_id=#{roadUserId} and road_user.status != 2
+    </update>
+
+    <select id="selectInspectorByAccount" resultType="java.lang.Integer">
+        select count(user_id)
+        from road_user
+        where account=#{account} and status!=2
+    </select>
+
+    <select id="selectInspectorByAccountAndId" resultType="java.lang.Integer">
+        select count(user_id)
+        from road_user
+        where account=#{account} and user_id != #{inspectorId} and status!=2
+    </select>
+
+    <select id="selectInspectorById" resultType="java.util.Map">
+        select road_user.user_id,road_user.user_name,road_user.gender,road_user.age,road_user.telephone,road_user.account
+        from road_user
+        where user_id=#{inspectorId} and status!=2
+    </select>
+
+    <update id="resetInspectorPassword">
+        update road_user
+        set password=subString(telephone,-6)
+        where user_id=#{inspectorId} and status!=2
+    </update>
+</mapper>

@@ -1,0 +1,37 @@
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/system/constructProject/constructProject.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">建造项目管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+
+                            <div class="layui-inline" >
+                                <button id="btnAdd" class="layui-btn icon-btn" ><i class="layui-icon">&#xe654;</i>新建</button>
+                                <button id="expandAll" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>展开所有</button>
+                                <button id="foldAll" class="layui-btn icon-btn"><i class="layui-icon">&#xe656;</i>折叠所有</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="supervisorTable" lay-filter="supervisorTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="tableBar">
+    {{#  if(d.parentId == 0){ }}
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add">新建</a>
+    {{#  } }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+</script>
+
+
+@}

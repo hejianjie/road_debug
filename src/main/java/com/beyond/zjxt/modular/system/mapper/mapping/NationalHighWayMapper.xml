@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.system.mapper.NationalHighWayMapper">
+<!-- 通用查询映射结果 -->
+<resultMap id="BaseResultMap" type="com.beyond.zjxt.modular.system.mapper.NationalHighWayMapper">
+    <id column="highway_id" property="highwayId" />
+    <result column="highway_name" property="highwayName" />
+    <result column="overall_length" property="overallLength" />
+    <result column="status" property="status" />
+</resultMap>
+    <!--通过查询结果列-->
+    <sql id="Base_Column_List">
+        highway_id as "highwayId",highway_name as "highwayName",overall_length as overallLength,
+        sectionCount as "sectionCount",stakeCount as "stakeCount",status as "status"
+    </sql>
+
+    <!--分页，查询所有的国道列表-->
+    <select id="HighWayList" resultType="map">
+select * from(
+        select e.highwayId as highwayId,e.highwayName as highwayName,e.overallLength as overallLength,e.sectionCount,e.status,sum(e.stakeCount) as stakeCount from (
+        select d.highway_id as highwayId,d.highway_name as highwayName,d.overall_length as overallLength,d.sectionCount,d.status as status,(select count(*) from stake where stake.road_section_id = d.road_section_id ) as stakeCount from
+        (select b.*,road_section.road_section_id from
+        (select n.*,(select count(*) from road_section where n.highway_id = road_section.national_highway_id) as sectionCount
+        from national_highway as n) as b left join road_section on road_section.national_highway_id = b.highway_id) as d) as e
+        group by e.highwayId,e.highwayName,e.overallLength,e.sectionCount,e.status) as f
+        <if test="highwayNameCondition != null and highwayNameCondition != ''">
+        where highwayName like CONCAT('%',#{highwayNameCondition},'%')
+        </if>
+        order by highwayId  DESC
+    </select>
+
+    <update id="setNationalHighWay" parameterType="com.beyond.zjxt.modular.system.entity.NationalHighWay">
+		update national_highway
+		set highway_name = #{highwayName},
+		overall_length = #{overallLength},
+        where highway_id = #{highwayId}
+	</update>
+
+
+    <insert id="addNationalHighWay">
+        insert into national_highway (highway_name,overall_length)
+        values('#{highwayName}','#{overallLength}')
+    </insert>
+    <update id="updateNationalHighWayById">
+        update national_highway
+        set highway_name = #{highway_name}
+        where highway_id = #{highway_id}
+    </update>
+    <select id="selectHighwayName" resultType="com.beyond.zjxt.modular.system.entity.NationalHighWay">
+        select * from national_highway
+        where highway_name = #{highway_name}
+    </select>
+    <delete id="deleteHighWay">
+        delete  from national_highway where highway_id = #{highway_id}
+    </delete>
+    <select id="selectHighWayCascader" resultType="com.beyond.zjxt.modular.system.entity.NationalHighWay">
+        select highway_id as highwayId,highway_name as highwayName from national_highway
+    </select>
+
+    <select id="selectRoadSectionCascader" resultType="com.beyond.zjxt.modular.road.entity.RoadSectionDTO">
+select  national_highway.highway_id as highwayId,road_section.road_section_id as roadSectionId,road_section.name as roadName
+from national_highway left join road_section on national_highway.highway_id = road_section.national_highway_id
+    </select>
+
+    <select id="selectStakeCascader" resultType="com.beyond.zjxt.modular.road.entity.StakeCascaderDTO">
+       select
+       road_section.road_section_id as roadSectionId,
+       stake.stake_id as stakeId,
+       stake.name as stakeName,
+       stake.stake_location as stakeLocation
+       from road_section  left join stake on stake.road_section_id = road_section.road_section_id
+       order by roadSectionId ASC ,stakeId ASC
+    </select>
+
+</mapper>

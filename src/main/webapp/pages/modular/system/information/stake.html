@@ -1,0 +1,76 @@
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/system/information/stake.js"]}){
+
+<!--下面是vue的按钮-->
+<!--<div id="app">-->
+<!--    <button   class="layui-btn icon-btn" v-on:click="add">这是vue的按钮哦!</button>-->
+<!--    <Modal v-model="visible"-->
+<!--           title="添加路桩"-->
+<!--            v-on:on-ok="ok">-->
+<!--        <i-input v-model="stakeName" placeholder="请输入桩名称" style="width: 300px" ></i-input>-->
+<!--        <br>-->
+<!--        <br>-->
+<!--        <i-input v-model="location1" placeholder="请输入公里" style="width: 300px" type ="number"></i-input>-->
+<!--        <br>-->
+<!--        <br>-->
+
+<!--        <Cascader v-bind:data="nationalHighwayList" v-bind:load-data="loadData" filterable></Cascader>-->
+
+<!--    </Modal>-->
+<!--</div>-->
+<div class="layui-body-header">
+    <span class="layui-body-header-title">桩管理</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+
+                                <select id="gd" lay-filter="gd"  lay-search multiple>
+                                    <option value="">请选择国道</option>
+                                </select>
+                            </div>
+                            <div class="layui-inline">
+                                <select id="ld" lay-filter="ld"  lay-search multiple>
+                                    <option value="">请选择路段</option>
+                                </select>
+                            </div>
+
+<!--                            <div class="layui-inline">-->
+<!--                                <input id="begin" class="layui-input" type="text" placeholder="起始位置"/>-->
+<!--                            </div>-->
+<!--                            <div class="layui-inline">-->
+<!--                                <input id="end" class="layui-input" type="text" placeholder="结束位置"/>-->
+<!--                            </div>-->
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                            </div>
+                            <div class="layui-inline" style="float: right">
+                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="layui-table" id="stakeTable" lay-filter="stakeTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="tableBar">
+
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
+
+
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+
+</script>
+
+
+@}

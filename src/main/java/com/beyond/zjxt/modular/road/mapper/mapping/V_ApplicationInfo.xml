@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.V_ApplicationInfoMapper">
+    <select id="selectByApplicationId" resultType="map">
+    with tmp as (  select * from v_applicationinfo where application_id=#{applicationId})
+        select *,road_section.name as road_section_name
+        from tmp
+        LEFT JOIN road_hazard on road_hazard.road_hazard_id = tmp.road_hazard
+        LEFT JOIN sys_user on road_hazard.user_id = sys_user.user_id
+        LEFT JOIN sys_dept on sys_user.dept_id = sys_dept.dept_id
+        LEFT JOIN patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+        LEFT JOIN road_section on road_section.road_section_id = patrol_result.road_section_id
+        LEFT JOIN national_highway on road_section.national_highway_id = national_highway.highway_id
+    </select>
+</mapper>

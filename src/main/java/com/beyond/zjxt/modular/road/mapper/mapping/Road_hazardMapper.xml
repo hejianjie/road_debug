@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Road_hazardMapper">
+    <sql id="Base_Column_List">
+        road_hazard_id AS "roadHazardId", patrol_result_id AS "patrolResultId", position AS "position", hazard_status AS "hazardStatus", size_type AS "sizeType", specific_size AS "specificSize", description AS "description", longitude AS "longitude", latitude AS "latitude",work_amount AS "workAmount",cost_price AS "costPrice",potential_hazard AS "potentialHazard",detect_time AS "detectTime",status AS "status",remark AS "remark"
+    </sql>
+<!--    <select id="list" resultType="map">-->
+<!--        select-->
+<!--        <include refid="Base_Column_List"/>-->
+<!--        from road_hazard where 1 = 1 and patrol_result_id=#{patrolResultId}-->
+<!--    </select>-->
+    <select id="list" resultType="map">
+        with tmp as (
+select road_hazard.*,hazard_unit.hazard_unit_name as sizeType,hazard_base_info.name as hazardStatus
+        from road_hazard,hazard_unit,hazard_base_info,sys_user where 1 = 1 and road_hazard.size_type=hazard_unit.hazard_unit_id and road_hazard.hazard_status=hazard_base_info.info_id
+         and sys_user.user_id=road_hazard.user_id
+         and patrol_result_id=#{patrolResultId} and sys_user.dept_id=#{deptId}
+)
+SELECT *,application.`status` as appStatus
+FROM tmp
+left JOIN application ON tmp.road_hazard_id=application.road_hazard
+
+    </select>
+
+    <select id="selectAllRoadHazard" resultType="map">
+        with tmp as (  select road_hazard.cost_price,road_hazard.description,road_hazard.detect_time,road_hazard.hazard_status,road_hazard.latitude,road_hazard.longitude,road_hazard.patrol_result_id,road_hazard.position,road_hazard.potential_hazard,road_hazard.remark,road_hazard.road_hazard_id,road_hazard.size_type,road_hazard.specific_size,road_hazard.`status`,road_hazard.user_id AS userId ,road_hazard.work_amount,hazard_unit.hazard_unit_name as sizeType,hazard_base_info.name as hazardStatus,v_patrol_info.*
+        from road_hazard,hazard_unit,hazard_base_info,v_patrol_info where 1 = 1 and road_hazard.size_type=hazard_unit.hazard_unit_id and road_hazard.hazard_status=hazard_base_info.info_id
+        AND v_patrol_info.patrolResultId=road_hazard.patrol_result_id)
+        select *,application.dateTime
+        from tmp
+        LEFT JOIN application ON tmp.road_hazard_id=application.road_hazard
+        where 1=1
+        <if test="supervisorId!=null and supervisorId!=''">
+            and supervisor_Id=#{supervisorId}
+        </if>
+
+        <if test="beginTime!=null">
+            and beginTime>=#{beginTime}
+        </if>
+        <if test="endTime!=null">
+            and endTime &lt;= #{endTime}
+        </if>
+        <if test="roadSectionId!=null and roadSectionId!=''">
+            and roadSectionId=#{roadSectionId}
+        </if>
+        <if test="highwayId!=null and highwayId!=''">
+            and highwayId=#{highwayId}
+        </if>
+        <if test="stakeId!=null and stakeId!=''">
+            and stakeId=#{stakeId} or stake_id=#{stakeId}
+        </if>
+        <if test="hazardStatusId!=null and hazardStatusId!=''">
+            and hazard_status=#{hazardStatusId}
+        </if>
+        <if test="pid!=null and pid!=''">
+            and orgPid=#{pid}
+        </if>
+        ORDER BY tmp.detect_time DESC
+    </select>
+
+    <select id="selectCountyRoadHazard" resultType="map">
+        with tmp as (  select road_hazard.cost_price,road_hazard.description,road_hazard.detect_time,road_hazard.hazard_status,road_hazard.latitude,road_hazard.longitude,road_hazard.patrol_result_id,road_hazard.position,road_hazard.potential_hazard,road_hazard.remark,road_hazard.road_hazard_id,road_hazard.size_type,road_hazard.specific_size,road_hazard.`status`,road_hazard.user_id AS userId ,road_hazard.work_amount,hazard_unit.hazard_unit_name as sizeType,hazard_base_info.name as hazardStatus,v_patrol_info.*
+        from road_hazard,hazard_unit,hazard_base_info,v_patrol_info,sys_user,sys_dept where 1 = 1 and road_hazard.size_type=hazard_unit.hazard_unit_id and road_hazard.hazard_status=hazard_base_info.info_id
+        AND v_patrol_info.patrolResultId=road_hazard.patrol_result_id and sys_user.user_id=road_hazard.user_id AND sys_dept.dept_id=sys_user.dept_id AND sys_dept.pid=#{deptId})
+        select *,application.dateTime
+        from tmp
+        LEFT JOIN application ON tmp.road_hazard_id=application.road_hazard
+        where 1=1
+        <if test="supervisorId!=null and supervisorId!=''">
+            and supervisor_Id=#{supervisorId}
+        </if>
+
+        <if test="beginTime!=null">
+            and beginTime>=#{beginTime}
+        </if>
+        <if test="endTime!=null">
+            and endTime &lt;= #{endTime}
+        </if>
+        <if test="roadSectionId!=null and roadSectionId!=''">
+            and roadSectionId=#{roadSectionId}
+        </if>
+        <if test="highwayId!=null and highwayId!=''">
+            and highwayId=#{highwayId}
+        </if>
+        <if test="stakeId!=null and stakeId!=''">
+            and stakeId=#{stakeId} or stake_id=#{stakeId}
+        </if>
+        <if test="hazardStatusId!=null and hazardStatusId!=''">
+            and hazard_status=#{hazardStatusId}
+        </if>
+        <if test="pid!=null and pid!=''">
+            and orgPid=#{pid}
+        </if>
+        ORDER BY tmp.detect_time DESC
+        </select>
+
+    <select id="selectSingleHazard" resultType="map">
+        select road_hazard.*,hazard_unit.hazard_unit_name as sizeType,hazard_base_info.name as hazardStatus,v_patrol_info.*
+        from road_hazard,hazard_unit,hazard_base_info,v_patrol_info where 1 = 1 and road_hazard.size_type=hazard_unit.hazard_unit_id and road_hazard.hazard_status=hazard_base_info.info_id
+		AND v_patrol_info.patrolResultId=road_hazard.patrol_result_id and road_hazard.road_hazard_id=#{roadHazardId}
+    </select>
+
+    <select id="selectById" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from road_hazard where road_hazard_id=#{roadHazardId}
+    </select>
+    <select id="getById" resultType="java.util.Map">
+        select *
+        from road_hazard
+        where road_hazard_id=#{roadHazardId}
+    </select>
+
+    <update id="updateStatus">
+        update road_hazard set status=#{status} where road_hazard_id=#{roadHazardId}
+    </update>
+
+    <select id="getStatus" resultType="java.util.Map">
+    select (case when road_hazard.status=1  then ( case  when application.status is null then 2 else application.status end) else 1 end ) as status,
+       (case when now()>=application.dateTime and application.status =8 and application.dateTime is not null then 2  else 0 end ) as state
+
+        from road_hazard left join application on application.road_hazard = road_hazard.road_hazard_id
+        where road_hazard.road_hazard_id = #{id}
+    </select>
+
+    <!--
+          select a.*,sys_user.dept_id as deptId,sys_dept.pid as deptParentId from
+			( select road_hazard.*,hazard_unit.hazard_unit_name as sizeType,hazard_base_info.name as hazardInfor
+        from road_hazard,hazard_unit,hazard_base_info
+				where 1 = 1 and road_hazard.size_type=hazard_unit.hazard_unit_id and road_hazard.hazard_status=hazard_base_info.info_id
+         and road_hazard_id=1 and road_hazard.status = 1) as a
+				 left join sys_user on a.user_id = sys_user.user_id
+				 left join sys_dept on sys_dept.dept_id = sys_user.dept_id
+				 where deptParentId = #{deptId}
+    -->
+    <select id="selectRoadHazardByroadHazardId" resultType="map">
+        select road_hazard.*,hazard_unit.hazard_unit_name as sizeType,hazard_base_info.name as hazardInfor, date_format(detect_time,'%Y-%m-%d %T') as detectTime
+        from road_hazard,hazard_unit,hazard_base_info where 1 = 1 and road_hazard.size_type=hazard_unit.hazard_unit_id and road_hazard.hazard_status=hazard_base_info.info_id
+         and road_hazard_id=#{roadHazardId}
+    </select>
+
+    <select id="selectByStatus" resultType="map">
+select road_hazard.*,v_patrol_info.*
+from road_hazard left join v_patrol_info on road_hazard.patrol_result_id=v_patrol_info.patrolResultId
+								 left join patrol_result on road_hazard.patrol_result_id = patrol_result.patrol_result_id
+								 left join sys_dept on sys_dept.dept_id = patrol_result.patrol_organization_id
+where sys_dept.pid = #{deptId} and road_hazard.`status` = 1 and road_hazard.road_hazard_id not in (select distinct application.road_hazard from application)
+order by  road_hazard.detect_time DESC
+    </select>
+
+    <!--区县部门领导审核 查出来的病害必须是已经通过养护经理审核 而且 区县填报人员已经填报 建设性质不是保养类型的的where  status = 2-->
+    <select id="countyFirstTrial" resultType="map">
+select * from (
+         select b.*,sys_user.dept_id as deptId,sys_dept.pid as deptParentId from (
+		select  a.*,application.status,application.application_id as applicationId  from
+        (select road_hazard.road_hazard_id as road_hazard_id,v_patrol_info.* FROM road_hazard,v_patrol_info
+        WHERE road_hazard.patrol_result_id=v_patrol_info.patrolResultId and road_hazard.status=1) as a
+        left join application on  application.road_hazard = a.road_hazard_id where  status = 2
+		) as b
+		left join sys_user on b.user_id = sys_user.user_id
+		left join sys_dept on sys_dept.dept_id = sys_user.dept_id) as c
+		 where deptParentId = #{deptId}
+    </select>
+
+    <select id="countySecondTrial" resultType="map">
+select * from (
+         select b.*,sys_user.dept_id as deptId,sys_dept.pid as deptParentId from (
+		select  a.*,application.status,application.application_id as applicationId  from
+        (select road_hazard.road_hazard_id as road_hazard_id,v_patrol_info.* FROM road_hazard,v_patrol_info
+        WHERE road_hazard.patrol_result_id=v_patrol_info.patrolResultId and road_hazard.status=1) as a
+        left join application on  application.road_hazard = a.road_hazard_id where  status = 3
+		) as b
+		left join sys_user on b.user_id = sys_user.user_id
+		left join sys_dept on sys_dept.dept_id = sys_user.dept_id) as c
+		 where deptParentId = #{deptId}
+    </select>
+
+    <select id="selectCountyFirstTrialByroadHazardId" resultType="map">
+      				   select a.*,application.application_id as applicationId from( select road_hazard.*,hazard_unit.hazard_unit_name as sizeType,hazard_base_info.name as hazardInfor,date_format(detect_time,'%Y-%m-%d %T') as detectTime
+        from road_hazard,hazard_unit,hazard_base_info
+				where 1 = 1 and road_hazard.size_type=hazard_unit.hazard_unit_id and road_hazard.hazard_status=hazard_base_info.info_id
+         and road_hazard.status = 1) as a
+				 left join application on  application.road_hazard = a.road_hazard_id where application.status in(2,3) and  road_hazard_id=  #{roadHazardId}
+    </select>
+
+    <select id="selectRoadHazard" resultType="map">
+SELECT road_hazard.* ,national_highway.highway_name,road_section.name,hazard_base_info.`name` as hazardName,road_hazard.detect_time,sys_user.name as user_name
+ FROM road_hazard LEFT JOIN patrol_result ON road_hazard.patrol_result_id = patrol_result.patrol_result_id
+                 LEFT JOIN national_highway  ON patrol_result.national_highway_id = national_highway.highway_id
+                 LEFT JOIN road_section ON road_section.road_section_id = patrol_result.road_section_id
+                 LEFT JOIN hazard_base_info  ON hazard_base_info.info_id = road_hazard.hazard_status
+                left join sys_user  on road_hazard.user_id = sys_user.user_id
+ WHERE road_hazard.`status` = 1 and patrol_result.patrol_organization_id = #{deptId}
+ORDER BY road_hazard.detect_time DESC
+
+
+    </select>
+</mapper>

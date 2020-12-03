@@ -1,0 +1,23 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/PendingQuantity/selectPendingQuantity.js"],css:["/assets/common/module/cascader/cascader.css"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">市级部门核量列表</span>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <table class="layui-table" id="roadHazardCountyFirstTrialList" lay-filter="roadHazardCountyFirstTrialList"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn" lay-event="showInfo" style="text-align:center; line-height:28px;">查看</a>
+</script>
+@}

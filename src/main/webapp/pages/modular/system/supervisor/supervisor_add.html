@@ -1,0 +1,51 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/system/supervisor/supervisor_add.js"]}){
+<form id="nationalHighWayForm" lay-filter="nationalHighWayForm" class="layui-form model-form">
+    <input name="parentId" value="${parentId}" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属单位<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input  type="text" class="layui-input" name="parentBodyName" value="${parentBodyName}"readonly required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">单位名称<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="supervisorName" placeholder="请输入单位名称" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">负责人<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="userName" placeholder="请输入负责人名称" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系电话<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="telephone" placeholder="请输入负责人联系电话" type="text" class="layui-input" lay-verify="phone" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="account" placeholder="请创建负责人账号" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号密码<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input id="pwd" type="password" name="password" placeholder="请创建负责人密码" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input id="pwdTwo" type="password" placeholder="再次确认密码"  class="layui-input"   lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+@}

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.V_PatrolInfoMapper">
+<select id="selectByPatrolResultId" resultType="map">
+    select * from v_patrol_info where patrolResultId=#{patrolResultId}
+</select>
+    <select id="list" resultType="map">
+        select * from v_patrol_info,sys_user where 1=1 and  v_patrol_info.user_id=sys_user.user_id
+        and sys_user.dept_id=#{deptId}
+        <if test="patrolResultId !=null and patrolResultId != ''">
+           and patrolResultId=#{patrolResultId}
+        </if>
+        <if test="supervisorId!=null and supervisorId!=''">
+            and supervisor_Id=#{supervisorId}
+        </if>
+        <if test="patrolerName!=null and patrolerName!=''">
+            and name like CONCAT('%',#{patrolerName},'%')
+        </if>
+        <if test="beginTime!=null">
+            and beginTime>=#{beginTime}
+        </if>
+        <if test="endTime!=null">
+            and endTime &lt;= #{endTime}
+        </if>
+        <if test="roadSectionId!=null and roadSectionId!=''">
+            and roadSectionId=#{roadSectionId}
+        </if>
+        <if test="highwayId!=null and highwayId!=''">
+            and highwayId=#{highwayId}
+        </if>
+        <if test="stakeId!=null and stakeId!=''">
+            and stakeId=#{stakeId} or stake_id=#{stakeId}
+        </if>
+        <if test="pid!=null and pid!=''">
+            and orgPid=#{pid}
+        </if>
+        order by v_patrol_info.beginTime DESC
+    </select>
+
+    <select id="deptList" resultType="map">
+        SELECT *
+        FROM v_patrol_info join sys_user on sys_user.user_id=v_patrol_info.user_id
+        join ( select *
+        from sys_dept
+        where  sys_dept.pid = #{deptId}) as pd on pd.dept_id = v_patrol_info.supervisor_Id
+
+
+        where 1=1
+
+        <if test="patrolResultId !=null and patrolResultId != ''">
+            and patrolResultId=#{patrolResultId}
+        </if>
+        <if test="supervisorId!=null and supervisorId!=''">
+            and supervisor_Id=#{supervisorId}
+        </if>
+        <if test="patrolerName!=null and patrolerName!=''">
+            and name like CONCAT('%',#{patrolerName},'%')
+        </if>
+        <if test="beginTime!=null">
+            and beginTime>=#{beginTime}
+        </if>
+        <if test="endTime!=null">
+            and endTime &lt;= #{endTime}
+        </if>
+        <if test="roadSectionId!=null and roadSectionId!=''">
+            and roadSectionId=#{roadSectionId}
+        </if>
+        <if test="highwayId!=null and highwayId!=''">
+            and highwayId=#{highwayId}
+        </if>
+        <if test="stakeId!=null and stakeId!=''">
+            and stakeId=#{stakeId} or stake_id=#{stakeId}
+        </if>
+        <if test="pid!=null and pid!=''">
+            and orgPid=#{pid}
+        </if>
+        order by v_patrol_info.beginTime DESC
+    </select>
+    <select id="cityList"  resultType="map">
+        SELECT *
+        FROM v_patrol_info join sys_user on sys_user.user_id=v_patrol_info.user_id
+        where 1=1
+        <if test="patrolResultId !=null and patrolResultId != ''">
+            and patrolResultId=#{patrolResultId}
+        </if>
+        <if test="supervisorId!=null and supervisorId!=''">
+            and supervisor_Id=#{supervisorId}
+        </if>
+        <if test="patrolerName!=null and patrolerName!=''">
+            and name like CONCAT('%',#{patrolerName},'%')
+        </if>
+        <if test="beginTime!=null">
+            and beginTime>=#{beginTime}
+        </if>
+        <if test="endTime!=null">
+            and endTime &lt;= #{endTime}
+        </if>
+        <if test="roadSectionId!=null and roadSectionId!=''">
+            and roadSectionId=#{roadSectionId}
+        </if>
+        <if test="highwayId!=null and highwayId!=''">
+            and highwayId=#{highwayId}
+        </if>
+        <if test="stakeId!=null and stakeId!=''">
+            and stakeId=#{stakeId} or stake_id=#{stakeId}
+        </if>
+        <if test="pid!=null and pid!=''">
+            and orgPid=#{pid}
+        </if>
+        order by v_patrol_info.beginTime DESC
+    </select>
+</mapper>

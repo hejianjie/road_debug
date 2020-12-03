@@ -1,0 +1,38 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/system/information/stake_add.js"]}){
+<form id="stakeForm" lay-filter="stakeForm" class="layui-form model-form">
+    <input name="stakeId" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">桩名称<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="name" placeholder="请输入桩名称" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">公里<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="stakeLocation" id="stakeLocation" placeholder="请输入公里" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">国道<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <select id="gd" lay-filter="gd" lay-search>
+                <option value="">请选择国道</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">路段<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <select id="ld" lay-filter="ld" lay-search>
+                <option value="">请选择路段</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+@}

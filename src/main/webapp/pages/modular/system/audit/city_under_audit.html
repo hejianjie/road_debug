@@ -1,0 +1,23 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/audit/city_under_audit.js"]}){
+<div class="layui-body-header">
+    <span class="layui-body-header-title">待审核列表</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <table class="layui-table" id="cityUnderAuditTb" lay-filter="cityUnderAuditTb"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="tableBar">
+    <a class="layui-btn" lay-event="audit" style="text-align:center; line-height:28px;">审核</a>
+</script>
+@}

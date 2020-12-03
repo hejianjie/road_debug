@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.SupervisorMapper">
+    <select id="selectByName" resultType="java.lang.Integer">
+        select supervisor_id
+        from supervisor
+        where name=#{supervisorName}
+    </select>
+    
+    <select id="selectCountyByUserId" resultType="java.util.Map">
+        select s1.supervisor_id as supervisorId, s1.supervisor_name as supervisorName
+        from supervisor as s1 left join supervisor as s2
+        on s1.parent_id=s2.supervisor_id
+        where s2.user_id=#{userId}
+    </select>
+    
+    <select id="selectDepartByCountyId" resultType="java.util.Map">
+        select s1.supervisor_id as supervisorId, s1.supervisor_name as supervisorName
+        from supervisor as s1 left join supervisor as s2
+        on s1.parent_id=s2.supervisor_id
+        where s2.supervisor_id=#{countyId}
+    </select>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.beyond.zjxt.modular.road.entity.Supervisor">
+        <id column="supervisor_id" property="supervisorId" />
+        <result column="supervisor_name" property="supervisorName" />
+        <result column="parent_id" property="parentId" />
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="telephone" property="telephone" />
+        <result column="account" property="account" />
+        <result column="password" property="password" />
+        <result column="number" property="number" />
+        <result column="icon" property="icon" />
+        <result column="parentBodyName" property="parentBodyName" />
+        <result column="personCount" property="personCount" />
+    </resultMap>
+
+    <!--分页，查询所有的建设性质列表-->
+    <select id="selectSupervisorList" resultType="java.util.Map">
+        select * from (
+        select d.*  from
+        (select  c.supervisorId,c.supervisorName,c.parentId from (select b.*,
+        road_user.password as password,
+        road_user.account as account,
+        road_user.telephone as telephone ,
+        road_user.user_name as userName from
+        (select
+        supervisor.supervisor_id as supervisorId,
+        supervisor.supervisor_name as supervisorName,
+        supervisor.parent_id as parentId,
+        supervisor.user_id as userId,
+        supervisor.icon as icon,
+        (select  count(a.parent_id)   from supervisor as a  where a.parent_id = supervisor.supervisor_id) as number
+        from supervisor ) as b
+        left join road_user on road_user.user_id = b.userId) as c
+        left join road_user on road_user.organization_id = c.supervisorId
+        group by c.supervisorId,c.supervisorName,c.parentId,c.userId,c.password,
+        c.account,c.telephone,c.userName
+        ) as d left join supervisor on supervisor.supervisor_id = d.parentId
+        ) as e
+        <if test="supervisorNameCondition != null and supervisorNameCondition != ''">
+            where supervisorName like CONCAT('%',#{supervisorNameCondition},'%')
+        </if>
+        order by supervisorId DESC
+    </select>
+    <!--根据id查询所有的建设性质-->
+    <select id="selectSupervisorById" resultType="com.beyond.zjxt.modular.road.entity.Supervisor">
+        select * from (
+        select d.* , supervisor.supervisor_name as parentBodyName from
+        (select  c.supervisorId,c.supervisorName,c.parentId,c.userId,c.password,
+        c.account,c.telephone,c.userName,c.number,count(road_user.user_name) as personCount from (select b.*,
+        road_user.password as password,
+        road_user.account as account,
+        road_user.telephone as telephone ,
+        road_user.user_name as userName from
+        (select
+        supervisor.supervisor_id as supervisorId,
+        supervisor.supervisor_name as supervisorName,
+        supervisor.parent_id as parentId,
+        supervisor.user_id as userId,
+        supervisor.icon as icon,
+        (select  count(a.parent_id)   from supervisor as a  where a.parent_id = supervisor.supervisor_id) as number
+        from supervisor ) as b
+        left join road_user on road_user.user_id = b.userId) as c
+        left join road_user on road_user.organization_id = c.supervisorId
+        group by c.supervisorId,c.supervisorName,c.parentId,c.userId,c.password,
+        c.account,c.telephone,c.userName
+        ) as d left join supervisor on supervisor.supervisor_id = d.parentId
+        ) as e
+      where supervisorId = #{supervisorId}
+    </select>
+    <!--添加之前判断:不能有重复的名字-->
+    <select id="selectByName" resultType="com.beyond.zjxt.modular.road.entity.Supervisor">
+        select *
+        from supervisor
+        where name=#{supervisorName}
+    </select>
+
+    <!--根据id查询所有的建设性质-->
+    <select id="selectSupervisorByUserId" resultType="com.beyond.zjxt.modular.road.entity.Supervisor">
+        select * from (
+        select d.* , supervisor.supervisor_name as parentBodyName from
+        (select  c.supervisorId,c.supervisorName,c.parentId,c.userId,c.password,
+        c.account,c.telephone,c.userName,c.number,count(road_user.user_name) as personCount from (select b.*,
+        road_user.password as password,
+        road_user.account as account,
+        road_user.telephone as telephone ,
+        road_user.user_name as userName from
+        (select
+        supervisor.supervisor_id as supervisorId,
+        supervisor.supervisor_name as supervisorName,
+        supervisor.parent_id as parentId,
+        supervisor.user_id as userId,
+        supervisor.icon as icon,
+        (select  count(a.parent_id)   from supervisor as a  where a.parent_id = supervisor.supervisor_id) as number
+        from supervisor ) as b
+        left join road_user on road_user.user_id = b.userId) as c
+        left join road_user on road_user.organization_id = c.supervisorId
+        group by c.supervisorId,c.supervisorName,c.parentId,c.userId,c.password,
+        c.account,c.telephone,c.userName
+        ) as d left join supervisor on supervisor.supervisor_id = d.parentId
+        ) as e
+      where userId = #{userId}
+    </select>
+    <insert id="addSupervisor" useGeneratedKeys="true" parameterType="com.beyond.zjxt.modular.road.entity.Supervisor">
+        insert into supervisor(supervisor_name,parent_id,icon)
+        values(#{supervisorName},#{parentId},#{icon})
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="supervisorId">
+            SELECT LAST_INSERT_ID() AS supervisorId
+        </selectKey>
+    </insert>
+
+    <update id="updateUserIdById">
+        update supervisor set user_id = #{user_id} where supervisor_id = #{supervisor_id}
+    </update>
+
+    <update id="updateSupervisorNameById">
+        update supervisor set supervisor_Name = #{supervisor_name} where supervisor_id = #{supervisor_id}
+    </update>
+
+    <delete id="removeSupervisorById">
+        delete from supervisor where supervisor_id = #{supervisorId}
+    </delete>
+    <!--某个区县的养护站，以区县的身份登录-->
+    <!--根据id查询所有的建设性质-->
+    <select id="selectSupervisorCountyListByParentId" resultType="map">
+        select * from (
+        select d.* , supervisor.supervisor_name as parentBodyName from
+        (select  c.supervisorId,c.supervisorName,c.parentId,c.userId,c.password,
+        c.account,c.telephone,c.userName,c.number,count(road_user.user_name) as personCount from (select b.*,
+        road_user.password as password,
+        road_user.account as account,
+        road_user.telephone as telephone ,
+        road_user.user_name as userName from
+        (select
+        supervisor.supervisor_id as supervisorId,
+        supervisor.supervisor_name as supervisorName,
+        supervisor.parent_id as parentId,
+        supervisor.user_id as userId,
+        supervisor.icon as icon,
+        (select  count(a.parent_id)   from supervisor as a  where a.parent_id = supervisor.supervisor_id) as number
+        from supervisor ) as b
+        left join road_user on road_user.user_id = b.userId) as c
+        left join road_user on road_user.organization_id = c.supervisorId
+        group by c.supervisorId,c.supervisorName,c.parentId,c.userId,c.password,
+        c.account,c.telephone,c.userName
+        ) as d left join supervisor on supervisor.supervisor_id = d.parentId
+        ) as e
+        where
+        <if test="supervisorNameCondition != null and supervisorNameCondition != ''">
+            supervisorName like CONCAT('%',#{supervisorNameCondition},'%')
+            and
+        </if>
+        parentId = #{parentId}
+    </select>
+
+    <!--级联-->
+    <select id="selectSupervisorCascader"  resultType="com.beyond.zjxt.modular.road.entity.SupervisorDTO">
+        select supervisor.supervisor_id as supervisorId,
+        supervisor.supervisor_name as supervisorName,
+        supervisor.parent_id as parentId,
+        supervisor.user_id as userId,
+        supervisor.icon as icon  from supervisor where parent_id != 0 and level = 2
+    </select>
+
+    <!--级联-->
+    <select id="selectCountyCascader"  resultType="com.beyond.zjxt.modular.road.entity.SupervisorDTO">
+        select sys_dept.dept_id as supervisorId,
+        sys_dept.full_name as supervisorName,
+        sys_dept.pid as parentId
+          from sys_dept where pid != 0
+    </select>
+
+</mapper>

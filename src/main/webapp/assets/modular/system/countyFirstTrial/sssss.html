@@ -1,0 +1,269 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/audit/roadHazardDetail.js"]}){
+<div class="layui-body-header">
+    <span class="layui-body-header-title">病害详情</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div>
+                            <input type="hidden" value="${applicationId}" id="applicationId">
+                            <div class="layui-card">
+                                <div class="layui-card-header" style="background-color: #3F4349;color: white;margin-left: 0px">
+                                    病害信息
+                                </div>
+                                <div class="layui-card-body">
+                                    <div class="layui-row layui-col-space5">
+                                        <div class="layui-col-md5">
+                                            <span id="issueLocation">位置：</span>
+                                            <span>${issueInfo.position}</span>
+                                        </div>
+                                        <div class="layui-col-md5">
+                                            <span id="issueDetectTime">提交时间：</span>
+                                            <span>${issueInfo.detect_time}</span>
+                                        </div>
+                                        <div class="layui-col-md2">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-row layui-col-space5">
+                                        <div class="layui-col-md5">
+                                            <span id="issueStatus">病害情况：</span>
+                                            <span>${issueInfo.hazardStatus}</span>
+                                        </div>
+                                        <div class="layui-col-md5">
+                                            <span id="issueSizeType">尺寸类型：</span>
+                                            <span>${issueInfo.sizeType}</span>
+                                        </div>
+                                        <div class="layui-col-md2">
+                                            <span id="issueSpecificSize">具体尺寸：</span>
+                                            <span>${issueInfo.specific_size}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-row layui-col-space5">
+                                        <div class="layui-col-md5">
+                                            <span id="issuepotentialHazard">安全隐患：</span>
+                                            <span>${issueInfo.potential_hazard}</span>
+                                        </div>
+                                        <div class="layui-col-md5">
+                                            <span id="issueLevel">级别：</span>
+                                            <span>${issueInfo.issueLevel}</span>
+                                        </div>
+                                        <div class="layui-col-md2">
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-row layui-col-space5">
+                                        <div class="layui-col-md5">
+                                            <span id="issuedescription">描述：</span>
+                                            <span>${issueInfo.description}</span>
+                                        </div>
+                                        <div class="layui-col-md5">
+
+                                        </div>
+                                        <div class="layui-col-md2">
+                                        </div>
+                                    </div>
+                                    <div class="layui-row layui-col-space5">
+                                        <div class="layui-col-md5">
+                                            <div class="layui-inline showImags" class="showImags" style="margin-top: 1%; float: left">
+                                                病害图片：
+                                                @if(tool.isEmpty(imgList)){
+                                                <span>暂无图片</span>
+                                                @}
+                                                @else{
+                                                @for(img in imgList){
+                                                <img style="width: 50px;height: 50px;margin-left: 10px" src="/image/${img.name}">
+                                                @}
+                                                @}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md5">
+                                    </div>
+                                    <div class="layui-col-md2">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                            </div>
+                            <div class="layui-card">
+                                <div class="layui-card-header" style="background-color: #3F4349;color: white;margin-left: 0px">
+                                    填报信息
+                                </div>
+
+                                @if(application==0){
+                                <div class="layui-body">
+                                    <label class="layui-form-label">暂没填写申请</label>
+                                </div>
+                                @}
+                                @else{
+                                <div class="layui-body">
+                                    <form class="layui-form layui-form-pane" action="" lay-filter="applicationForm">
+                                        <div class="layui-form-item" >
+                                            <label class="layui-form-label" style="width: 10%">建设性质</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input name="construct_type" value="${application.construct_type_name}" id="construct_type" type="text" class="layui-input" readonly>
+                                            </div>
+                                            <label class="layui-form-label" style="width: 10%">项目名称</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input name="construct_project" value="${application.construct_project_name}"  id="construct_project" type="text" class="layui-input" readonly >
+                                            </div>
+                                            <label class="layui-form-label" style="width: 10%">细目名称</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input name="construct_project_detail" value="${application.construct_project_detail_name}" id="construct_project_detail" type="text" class="layui-input" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item" style="margin-top: 15px">
+                                            <label class="layui-form-label" style="width: 10%">病害状况</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input type="text" value="${application.name}" name="road_hazard_status" lay-verify="title" autocomplete="off" readonly class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label" style="width: 10%">单位</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input type="text" value="${application.hazard_unit_name}" readonly name="hazard_unit" id="hazard_unit" class="layui-input">
+                                            </div>
+
+                                            <label class="layui-form-label" style="width: 10%">具体尺寸</label>
+                                            @if(application.hazard_unit_name=="体积"){
+                                            <div class="layui-form-inline" name="unit1" id="unit1" >
+                                                <div class="layui-input-inline" style="width: 5%">
+                                                    <input type="text" value="${lengths}" name="specific_size1" lay-verify="title" class="layui-input" readonly>
+                                                </div>
+                                                <div class="layui-form-mid">*</div>
+                                                <div class="layui-input-inline" style="width: 5%">
+                                                    <input type="text" value="${widths}" name="specific_size2" lay-verify="title"   class="layui-input" readonly>
+                                                </div>
+                                                <div class="layui-form-mid">*</div>
+                                                <div class="layui-input-inline" style="width: 5%">
+                                                    <input type="text" value="${heights}" name="specific_size3" lay-verify="title"   class="layui-input" readonly>
+                                                </div>
+                                            </div>
+                                            @}
+                                            @if(application.hazard_unit_name=="面积"){
+
+                                            <div class="layui-form-inline" name="unit2" id="unit2" >
+                                                <div class="layui-input-inline" style="width: 10%">
+                                                    <input type="text" value="${lengths}" name="specific_size4" lay-verify="title"   class="layui-input" readonly>
+                                                </div>
+                                                <div class="layui-form-mid">*</div>
+                                                <div class="layui-input-inline" style="width: 10%">
+                                                    <input type="text" value="${widths}" name="specific_size5" lay-verify="title"  class="layui-input" readonly>
+                                                </div>
+                                            </div>
+                                            @}
+                                            @if(application.hazard_unit_name=="长度"){
+                                            <div class="layui-form-inline" name="unit3" id="unit3"  >
+                                                <div class="layui-input-inline" style="width: 14%">
+                                                    <input type="text" value="${miles}  米" name="specific_size6" lay-verify="title"  class="layui-input" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="layui-input-inline"style="width:4%;margin-left:6px;margin-top:3px">米</div>
+
+                                            @}
+                                            @if(application.hazard_unit_name=="个数"){
+                                            <div class="layui-form-inline" name="unit4" id="unit4"  >
+                                                <div class="layui-input-inline" style="width: 14%">
+                                                    <input type="text" value="${numbers}" name="specific_size7" lay-verify="title"  class="layui-input" readonly>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                </div>
+                                            </div>
+                                            <div class="layui-input-inline"style="width:4%;margin-left:6px;margin-top:3px">个</div>
+                                            @}
+
+                                        </div>
+
+                                        <div class="layui-form-item" style="margin-top: 15px">
+                                            <label class="layui-form-label" style="width: 10%">工程量</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input type="text" value="${application.work_amount}" name="work_amount" lay-verify="title"  class="layui-input" readonly>
+                                            </div>
+                                            <label class="layui-form-label" style="width: 10%">单价种类</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input class="layui-input" type="text" value="${application.unit_price_type_name}" readonly>
+                                            </div>
+                                            <label class="layui-form-label" style="width: 10%">单价</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <div class="layui-input-inline">
+                                                    <input type="text" value="${application.unit_price}" style="width: 140px" name="unit_price" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="layui-input-inline"style="width:4%;margin-top:3px">元 </div>
+                                        </div>
+
+                                        <div class="layui-form-item" style="margin-top: 15px">
+                                            <label class="layui-form-label" style="width: 10%">作业频率</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input value="${application.work_frequency}" readonly type="text" name="work_frequency" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                                            </div>
+
+                                            <label class="layui-form-label" style="width: 10%">预估费用</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <div class="layui-input-inline">
+                                                    <input value="${application.appraisal_cost}" readonly style="width: 140px" type="text" name="appraisal_cost" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-input-inline"style="width:4%;margin-top:3px">元 </div>
+                                        </div>
+
+                                        <div class="layui-form-item" style="margin-top: 15px">
+                                            <label class="layui-form-label" style="width: 10%">完成时限</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <div class="layui-input-inline">
+                                                    <input type="text" value="${application.estimated_finish_time}" readonly style="width: 140px" name="estimated_finish_time" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <!--                                            <div class="layui-input-inline"style="width:4%;margin-top:3px">天</div>-->
+
+                                            <label class="layui-form-label" style="width: 10%">时限日期</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input type="text" name="date" value="${application.estimated_finish_duration}" readonly id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                            </div>
+                                            <div class="layui-input-inline"style="width:4%;margin-top:3px">天</div>
+
+                                        </div>
+
+                                        <div class="layui-form-item" style="margin-top: 15px">
+                                            <label class="layui-form-label" style="width: 10%">填报人</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input type="text" value="${application.county_applicant_name}" readonly name="county_applicant" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                                            </div>
+
+                                            <label class="layui-form-label" style="width: 10%">审核人1</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input type="text" value="${application.auditor_one_name}" readonly name="auditor_one" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                                            </div>
+
+                                            <label class="layui-form-label"style="width: 10%">审核人2</label>
+                                            <div class="layui-input-inline" style="width: 14%">
+                                                <input type="text" value="${application.auditor_tow_name}" readonly name="auditor_two" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                @}
+
+                            </div>
+                        </div>
+                        <div>
+                            <div class="layui-card">
+                                <div class="layui-card-header" style="background-color: #3F4349;color: white;margin-left: 0px">
+                                    第三方评估信息
+                                </div>
+                                <div class="layui-body">
+                                    <table class="layui-table" id="appraisalList" lay-filter="appraisalList" ></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@}

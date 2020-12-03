@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Sys_deptMapper">
+    <select id="getPid" resultType="java.lang.Integer">
+        select pid
+        from sys_dept
+        where dept_id=#{deptId}
+    </select>
+
+    <select id="selectCounty" resultType="java.util.Map">
+        select s1.dept_id as supervisorId, s1.full_name as supervisorName
+        from sys_dept as s1
+        where pid in (select dept_id
+                      from sys_dept
+                      where pid=0)
+    </select>
+    <select id="selectDepartByCountyId" resultType="java.util.Map">
+        select s1.dept_id as supervisorId, s1.full_name as supervisorName
+        from sys_dept as s1 left join sys_dept as s2
+        on s1.pid=s2.dept_id
+        where s2.dept_id=#{countyId}
+    </select>
+</mapper>

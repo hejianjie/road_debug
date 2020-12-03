@@ -1,0 +1,158 @@
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/system/audit/application_add.js"]}){
+
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/common/layui/css/layui.css"  media="all">
+</head>
+<body>
+
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>区县部门计划填报</legend>
+</fieldset>
+
+<form class="layui-form layui-form-pane" action="" lay-filter="applicationForm">
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 7%">建设性质</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <select name="construct_type" id="construct_type" lay-verify="required">
+            </select>
+        </div>
+        <label class="layui-form-label" style="width: 7%">项目名称</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <select name="construct_project" id="construct_project" lay-filter="project_filter" lay-verify="required">
+            </select>
+        </div>
+        <label class="layui-form-label" style="width: 7%">细目名称</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <select name="construct_project_detail" id="construct_project_detail" lay-verify="required">
+                <option value="">请先选择项目</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 7%">病害状况</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <input type="text" name="road_hazard_status" lay-verify="required" autocomplete="off" placeholder="请输入病害状况" class="layui-input">
+        </div>
+
+        <label class="layui-form-label" style="width: 7%">单位</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <select name="hazard_unit" id="hazard_unit" lay-filter="unit_filter" lay-verify="required">
+            </select>
+        </div>
+
+        <label class="layui-form-label" style="width: 7%">具体尺寸</label>
+
+        <div class="layui-form-label" name="unit0" id="unit0" style="width: 14%">请先选择单位</div>
+
+        <div class="layui-form-inline" name="unit1" id="unit1" style="display:none">
+            <div class="layui-input-inline" style="width: 5%">
+                <input type="number" step="0.01" name="specific_size1" id="specific_size1" autocomplete="off" placeholder="长" class="layui-input">
+            </div>
+            <div class="layui-form-mid">*</div>
+            <div class="layui-input-inline" style="width: 5%">
+                <input type="number" step="0.01" name="specific_size2" id="specific_size2" autocomplete="off" placeholder="宽" class="layui-input">
+            </div>
+            <div class="layui-form-mid">*</div>
+            <div class="layui-input-inline" style="width: 5%">
+                <input type="number" step="0.01" name="specific_size3" id="specific_size3" autocomplete="off" placeholder="高" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-inline" name="unit2" id="unit2" style="display:none">
+            <div class="layui-input-inline" style="width: 7%">
+                <input type="number" step="0.01" name="specific_size4" id="specific_size4" autocomplete="off" placeholder="长" class="layui-input">
+            </div>
+            <div class="layui-form-mid">*</div>
+            <div class="layui-input-inline" style="width: 7%">
+                <input type="number" step="0.01" name="specific_size5" id="specific_size5" autocomplete="off" placeholder="宽" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-inline" name="unit3" id="unit3" style="display:none" style="width: 14%">
+            <div class="layui-input-inline">
+                <input type="number" step="0.01" name="specific_size6" id="specific_size6" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid">米</div>
+        </div>
+        <div class="layui-form-inline" name="unit4" id="unit4" style="display:none" style="width: 14%">
+            <div class="layui-input-inline">
+                <input type="number" name="specific_size7" id="specific_size7" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid">个</div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 7%">工程量</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <input type="number" step="0.001" name="work_amount" id="work_amount" lay-verify="required" autocomplete="off" placeholder="" class="layui-input"git
+        </div>
+        <label class="layui-form-label" style="width: 7%">单价种类</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <select name="unit_price_type" id="unit_price_type" lay-filter="unit_price_filter" lay-verify="required">
+            </select>
+        </div>
+        <label class="layui-form-label" style="width: 7%">单价</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <div class="layui-input-inline">
+                <input type="number" step="0.01" name="unit_price" id="unit_price" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+            <div class="layui-form-mid">元</div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 7%">作业频率</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <input type="text" name="work_frequency" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">
+        </div>
+
+        <label class="layui-form-label" style="width: 7%">预估费用</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <div class="layui-input-inline">
+                <input type="text" name="appraisal_cost" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">
+            </div>
+            <div class="layui-form-mid">元</div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 7%">完成时限</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <div class="layui-input-inline">
+                <input type="number" name="estimated_finish_time" id="estimated_finish_time" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+            <div class="layui-form-mid">天</div>
+        </div>
+
+        <label class="layui-form-label" style="width: 7%">时限日期</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" readonly="readonly">
+        </div>
+
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 7%">填报人</label>
+        <div class="layui-input-inline" style="width: 14%">
+            <input type="text" name="county_applicant" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">
+        </div>
+    </div>
+    <div class="layui-form-item" align="center">
+        <div class="layui-input-block">
+            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+            <button type="button" class="layui-btn layui-btn-primary" id="apk_reset_btn">重置</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
+
+@}

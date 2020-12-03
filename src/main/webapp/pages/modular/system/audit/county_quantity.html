@@ -1,0 +1,125 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/audit/county_quantity.js"]}){
+<head>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/css/number.css"/>
+</head>
+<!----区县填报申请--->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+<div style="margin-top:20px; display:none" name="fillForm" id="fillForm">
+    <div class="layui-card-header" style="background-color: #3F4349;color: white">
+        区县初步验收核量
+    </div>
+    <div style="margin-top: 15px;width: 100%">
+        <form class="layui-form layui-form-pane" action="" lay-filter="applicationForm">
+            <div class="layui-form-item">
+
+                <label class="layui-form-label" >病害状况</label>
+                <div class="layui-input-inline" >
+                    <input type="text" name="road_hazard_status" lay-verify="required" autocomplete="off" placeholder="请输入病害状况" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+
+                <label class="layui-form-label" >单位</label>
+                <div class="layui-input-inline" >
+                    <select name="hazard_unit" id="hazard_unit" lay-filter="unit_filter" lay-verify="required">
+                    </select>
+                </div>
+
+                <label class="layui-form-label" >具体尺寸</label>
+
+                <div class="layui-form-label" name="unit0" id="unit0">请先选择单位</div>
+
+                <div class="layui-form-inline" name="unit1" id="unit1" style="display:none">
+                    <div class="layui-input-inline" style="width: 7%">
+                        <input type="number" step="0.01" name="specific_size1" id="specific_size1" min="0" οnkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled" autocomplete="off" placeholder="长" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid">*</div>
+                    <div class="layui-input-inline" style="width: 7%">
+                        <input type="number" step="0.01" name="specific_size2" id="specific_size2" autocomplete="off" placeholder="宽" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid">*</div>
+                    <div class="layui-input-inline" style="width: 7%">
+                        <input type="number" step="0.01" name="specific_size3" id="specific_size3" autocomplete="off" placeholder="高" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-inline" name="unit2" id="unit2" style="display:none">
+                    <div class="layui-input-inline" style="width: 7%">
+                        <input type="number" step="0.01" name="specific_size4" id="specific_size4" autocomplete="off" placeholder="长" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid">*</div>
+                    <div class="layui-input-inline" style="width: 7%">
+                        <input type="number" step="0.01" name="specific_size5" id="specific_size5" autocomplete="off" placeholder="宽" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-input-inline" name="unit3" id="unit3" style="display:none" style="width: 14%">
+                    <div class="layui-input-inline" style="width: 80%;margin-left: 9px">
+                        <input type="number" step="0.01" name="specific_size6" id="specific_size6" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-mid">米</div>
+                </div>
+
+                <div class="layui-input-inline" name="unit4" id="unit4" style="display:none" style="width: 14%">
+                    <div class="layui-input-inline" style="width: 80%;margin-left: 9px">
+                        <input type="number" name="specific_size7" id="specific_size7" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-mid">个</div>
+                </div>
+
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" >工程量</label>
+                <div class="layui-input-inline" >
+                    <input type="number" step="0.001" name="work_amount" id="work_amount" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">
+                </div>
+
+
+                <label class="layui-form-label">单价</label>
+                <div class="layui-input-inline">
+                    <input type="number" step="0.01" name="unit_price" id="unit_price" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+                </div>
+                <div class="layui-input-mid">元</div>
+            </div>
+
+
+            <div class="layui-form-item">
+
+                <label class="layui-form-label" >费用</label>
+                <div class="layui-input-inline" >
+                    <input type="text" id="appraisal_cost" name="appraisal_cost"  lay-verify="required" autocomplete="off" placeholder="" class="layui-input" readonly="readonly" >
+                </div>
+                <div class="layui-input-mid">元</div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">时限日期</label>
+                <div class="layui-input-inline" >
+                    <input type="text"  name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" placeholder="请输入日期" autocomplete="off" class="layui-input" >
+                </div>
+
+            </div>
+
+
+
+            <div class="layui-form-item" align="center"  >
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo2">保存</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+</div>
+</div>
+        </div>
+    </div>
+</div>
+@}

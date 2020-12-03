@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Construct_project_detailMapper">
+    <select id="selectByProjectId" resultType="java.util.Map">
+        select *
+        from construct_project_detail
+        where construct_project_id=#{constructProjectId}
+    </select>
+</mapper>

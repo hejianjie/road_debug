@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.AcceptanceMapper">
+    <select id="selectOne" resultType="java.util.Map">
+        select *
+        from acceptance
+        where acceptance_id=#{acceptanceId}
+    </select>
+
+    <update id="firstAuditor">
+        update acceptance
+        set auditor_one=#{userId},auditor_one_result=#{result},auditor_one_time=#{date}
+        where acceptance_id=#{acceptanceId}
+    </update>
+
+<!--    &lt;!&ndash;根据是部门id获取待核量的列表&ndash;&gt;-->
+<!--    <select id="selectPendingQuantity" resultType="map">-->
+<!--     select d.*,d.applicationId,acceptance.acceptance_id as acceptanceId  ,case when (acceptance.first_audit_result >=0 )then acceptance.first_audit_result else -1 end as  first_audit_result-->
+<!--     from (-->
+<!--            select  c.*,s.pid as LastDept from (-->
+<!--               select b.*,sys_user.dept_id as deptId,sys_dept.pid as deptParentId from (-->
+<!--              select  a.*,application.status,application.application_id as applicationId  from-->
+<!--            (select road_hazard.road_hazard_id as road_hazard_id,v_patrol_info.* FROM road_hazard,v_patrol_info-->
+<!--             WHERE road_hazard.patrol_result_id=v_patrol_info.patrolResultId and road_hazard.status=1) as a-->
+<!--              left join application on  application.road_hazard = a.road_hazard_id where application.status>9-->
+<!--              ) as b-->
+<!--             left join sys_user on b.user_id = sys_user.user_id-->
+<!--             left join sys_dept on sys_dept.dept_id = sys_user.dept_id-->
+<!--            ) as c  left join sys_dept as s on c.deptParentId = s.dept_id-->
+<!--              )as d left join acceptance on acceptance.application_id = d.applicationId and acceptance.role_id != 1200000929026998274-->
+<!--where  LastDept =  #{deptId} and acceptance.acceptance_id!=0-->
+<!--    </select>-->
+
+
+    <select id="selectPendingQuantity" resultType="map">
+select acceptance.*,acceptance.acceptance_id as acceptanceId,v_patrol_info.*,road_hazard.road_hazard_id
+from acceptance left join application on application.application_id = acceptance.application_id
+				left join road_hazard on road_hazard.road_hazard_id = application.road_hazard
+                left join v_patrol_info on v_patrol_info.patrolResultId = road_hazard.patrol_result_id
+				left join patrol_result on patrol_result.patrol_result_id = road_hazard.patrol_result_id
+				left join sys_dept as a on patrol_result.patrol_organization_id = a.dept_id
+				left join sys_dept as b on a.pid = b.dept_id
+where acceptance.status = 2 and b.pid = #{deptId}
+    </select>
+
+    <!--根据是部门id获取待核量的列表-->
+<!--    <select id="selectPendingQuantityCounty" resultType="map">-->
+<!--        select acceptance.*,acceptance.acceptance_id as acceptanceId,v_patrol_info.*,road_hazard.road_hazard_id-->
+<!--        from acceptance left join application on acceptance.application_id = application.application_id-->
+<!--                        left join road_hazard on road_hazard.road_hazard_id = application.road_hazard-->
+<!--                        left join v_patrol_info on v_patrol_info.patrolResultId = road_hazard.patrol_result_id-->
+<!--						left join sys_user on acceptance.accept_organisation = sys_user.user_id-->
+<!--        where acceptance.role_id = 16 and sys_user.dept_id =#{deptParentId}-->
+<!--    </select>-->
+    <select id="selectPendingQuantityCounty" resultType="map">
+with tmp as (select acceptance.acceptance_id ,  acceptance.application_id,acceptance.status
+from acceptance left join sys_user on acceptance.accept_organisation = sys_user.user_id
+                left join sys_dept on sys_user.dept_id = sys_dept.dept_id
+where sys_dept.dept_id =#{deptParentId})
+
+select v_patrol_info.*,road_hazard.road_hazard_id,application.application_id,application.status,tmp.acceptance_id,tmp.status as hlStatus,#{roleId} as roleId
+ FROM application
+ LEFT JOIN road_hazard ON road_hazard.road_hazard_id = application.road_hazard
+ LEFT JOIN v_patrol_info ON v_patrol_info.patrolResultId = road_hazard.patrol_result_id
+ LEFT JOIN patrol_result ON road_hazard.patrol_result_id = patrol_result.patrol_result_id
+ LEFT JOIN sys_dept ON sys_dept.dept_id = patrol_result.patrol_organization_id
+LEFT JOIN  tmp on tmp.application_id = application.application_id
+ WHERE sys_dept.pid =#{deptParentId} and sysdate()>application.dateTime
+order by ISNULL(hlStatus), hlStatus asc
+    </select>
+
+    <select id="getByApplicationId" resultType="map">
+        SELECT sys_user.name as name,c.*,application.road_hazard as road_hazard_id
+        from inspection_company as a
+        left join sys_user on sys_user.user_id = a.third_party_id left join acceptance as c on a.application_id = c.application_id and sys_user.user_id = c.accept_organisation
+				left join application on application.application_id = c.application_id
+        where a.application_id=#{applicationId}
+    </select>
+
+    <update id="changeStatus">
+        update inspection_company
+        set status = 1
+        where third_party_id=#{userId} and application_id = #{applicationId}
+    </update>
+    <select id="findByAcceptanceId" resultType="map">
+        select *
+        from acceptance
+        where acceptance_id = #{acceptanceId}
+    </select>
+    <update id="addStatus">
+        update acceptance
+        set status = status + 1
+        where acceptance_id =#{acceptanceId}
+    </update>
+    <update id="secondAuditor">
+        update acceptance
+        set auditor_two=#{userId},auditor_two_result=#{result},auditor_two_time=#{date}
+        where acceptance_id=#{acceptanceId}
+    </update>
+</mapper>

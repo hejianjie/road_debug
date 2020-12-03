@@ -1,0 +1,57 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/system/roadUser/road_user_add.js"]}){
+<form id="roadSectionForm" lay-filter="roadSectionForm" class="layui-form model-form">
+    <input name="roadSectionId" type="hidden"/>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="name" placeholder="请输入姓名" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" name="gender" value="1" title="男" checked>
+            <input type="radio" name="gender" value="0" title="女">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">年龄<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="age" id="age" placeholder="请输入(岁)" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="telephone" id="telephone" placeholder="请输入电话" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">管理单位(区县)<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <select id="qx" lay-filter="qx">
+                <option value="">请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">管理单位(所)<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <select id="s" lay-filter="s">
+                <option value="">请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号<span style="color: red;">*</span></label>
+        <div class="layui-input-block">
+            <input name="account" id="account" placeholder="请输入账号" type="text" class="layui-input" lay-verify="required" required/>
+        </div>
+    </div>
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+@}

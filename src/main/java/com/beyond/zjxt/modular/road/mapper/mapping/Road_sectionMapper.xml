@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Road_sectionMapper">
+    <select id="selectAll" resultType="java.util.Map">
+        select road_section.road_section_id,road_section.name,road_section.overall_length,road_section.begin_at,road_section.end_at,sys_dept.full_name as supervisor_name,national_highway.status,count(stake.stake_id) as stakeCount
+        from road_section left join national_highway
+        on road_section.national_highway_id =national_highway.highway_id
+        left join sys_dept
+        on road_section.supervisor_id=sys_dept.dept_id
+        left join stake
+        on stake.road_section_id=road_section.road_section_id
+        group by road_section.road_section_id
+        order by road_section.road_section_id
+    </select>
+
+    <select id="selectByHighwayId" resultType="java.util.Map">
+        select road_section.road_section_id,road_section.name,road_section.overall_length,road_section.begin_at,road_section.end_at,sys_dept.full_name as supervisor_name,national_highway.status,count(stake.stake_id) as stakeCount
+        from road_section left join national_highway
+        on road_section.national_highway_id =national_highway.highway_id
+        left join sys_dept
+        on road_section.supervisor_id=sys_dept.dept_id
+        left join stake
+        on stake.road_section_id=road_section.road_section_id
+        where national_highway.highway_id=#{highwayId}
+        group by road_section.road_section_id
+        order by road_section.road_section_id
+    </select>
+
+    <select id="selectOneSection" resultType="java.util.Map">
+        select road_section.road_section_id,road_section.name,road_section.overall_length,road_section.begin_at,road_section.end_at
+        from road_section
+        where road_section_id=#{roadSectionId}
+    </select>
+
+    <insert id="addRoadSection">
+        insert into road_section(name,overall_length,begin_at,end_at,supervisor_id,national_highway_id)
+        values(#{name},#{overallLength},#{beginAt},#{endAt},#{supervisorId},#{nationalHighwayId})
+    </insert>
+
+    <update id="update">
+        update road_section
+        <set>
+            name=#{name},
+            overall_length=#{overallLength},
+            begin_at=#{beginAt},
+            end_at=#{endAt},
+            supervisor_id=#{supervisorId},
+            national_highway_id=#{nationalHighwayId}
+        </set>
+        where road_section_id = #{roadSectionId}
+    </update>
+
+    <delete id="deleteByRoadSectionId">
+        delete from road_section
+        where road_section_id= #{roadSectionId}
+    </delete>
+
+</mapper>

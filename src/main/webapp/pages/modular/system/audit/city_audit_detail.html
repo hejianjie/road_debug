@@ -1,0 +1,55 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/system/audit/city_audit_detail.js"]}){
+<form id="noticeForm" lay-filter="noticeForm" class="layui-form model-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">评估公司</label>
+        <div class="layui-input-block">
+            <input name="title" id="name" type="text" class="layui-input"  readonly/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">评估时间</label>
+        <div class="layui-input-block">
+            <input name="title" id="appraisal_time"  class="layui-input" lay-verify="required" readonly/>
+        </div>
+    </div>
+
+    <div class="layui-form-item" >
+        <label class="layui-form-label" >尺寸类型</label>
+        <div class="layui-input-block" >
+            <input  value="${detail.hazard_unit_name}"  type="text" class="layui-input" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label" >具体尺寸</label>
+        @if(detail.hazard_unit_name=='面积'){
+        <div class="layui-input-block" >
+            <input  value="${detail.specific_size} 平方米"  type="text" class="layui-input" readonly>
+        </div>
+        @}
+        @if(detail.hazard_unit_name=='体积'){
+        <div class="layui-input-block">
+            <input  value="${detail.specific_size} 立方米"  type="text" class="layui-input" readonly>
+        </div>
+        @}
+        @if(detail.hazard_unit_name=='个数'){
+        <div class="layui-input-block" >
+            <input  value="${detail.specific_size} 个"  type="text" class="layui-input" readonly>
+        </div>
+        @}
+        @if(detail.hazard_unit_name=='长度'){
+        <div class="layui-input-block" >
+            <input  value="${detail.specific_size} 米"  type="text" class="layui-input" readonly>
+        </div>
+        @}
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">评估价格</label>
+        <div class="layui-input-block">
+            <input name="title" id="cost_price"  class="layui-input" lay-verify="required" readonly/>
+        </div>
+    </div>
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+    </div>
+</form>
+@}

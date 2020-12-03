@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.AppraisalMapper">
+    <sql id="Base_Column_List">
+        appraisal_id, application_id, appraisal_time, appraisal_organisation_id, unit, specific_size, work_amount, unit_price, cost_price,deduction,second_audit_price,second_audit_result,auditor_one,auditor_two,img,
+        description,longitude,latitude,position,hazard_status,patrol_result_id
+    </sql>
+    <select id="getInfo" resultType="map">
+        SELECT position,hazard_status as hazardStatus,unit,specific_size as specificSize,appraisal_time as appraisalTime,cost_price as costPrice,description,patrol_result_id as patrolResultId,longitude,latitude
+        from appraisal
+        where appraisal_id =#{appraisal_id}
+    </select>
+    <select id="getByApplicationId" resultType="map">
+SELECT sys_user.name as name,c.*,a.id
+        from cost_evaluation_company_road_hazard as a
+        left join sys_user on sys_user.user_id = a.third_party_id
+        left join appraisal as c on a.application_id = c.application_id and sys_user.user_id = c.appraisal_organisation_id
+        where a.application_id =#{applicationId}
+    </select>
+
+    <update id="changeStatus">
+        update cost_evaluation_company_road_hazard
+        set status = 1
+        where third_party_id=#{userId} and application_id = #{applicationId}
+    </update>
+
+    <select id="getCostEvaluationDetail" resultType="map">
+        SELECT sys_user.name as name,c.*,a.id,hazard_unit_name
+        from cost_evaluation_company_road_hazard as a
+        left join sys_user on sys_user.user_id = a.third_party_id
+        left join appraisal as c on a.application_id = c.application_id and sys_user.user_id = c.appraisal_organisation_id
+        left join application  on a.application_id = application.application_id
+        left join hazard_unit on application.organization_id = hazard_unit_id
+        where a.id =#{id}
+        limit 1;
+    </select>
+</mapper>

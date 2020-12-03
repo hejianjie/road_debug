@@ -1,0 +1,112 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/issueDetailInfo/issueDetailInfo.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">巡查详细信息</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div>
+                        <div class="layui-card">
+                            <div class="layui-card-header" style="background-color: #3F4349;color: white">
+                                巡查信息
+                            </div>
+                            <div class="layui-card-body">
+                                <div>
+                                    <span id="patrolRoad">巡查路段：</span>
+                                    <span>${patrolResultInfo.roadSectionName}-${patrolResultInfo.nationalHighwayName}</span>
+                                </div>
+                                <div>
+                                    <span id="patrolTime">巡查时间：</span>
+                                    <span>${patrolBeginTime}&nbsp~&nbsp</span>
+                                    <span>${patrolEndTime}</span>
+                                </div>
+                                <div>
+                                    <span id="patrolOrganization">巡查单位：</span>
+                                    <span>${patrolResultInfo.supervisorName}</span>
+                                </div>
+                                <div>
+                                    <span id="inspectorId">巡查员：</span>
+                                    <span>${patrolResultInfo.patrolerName}</span>
+                                </div>
+                                <div>
+                                    <span id="patrolIssues">问题：</span>
+                                    @if(patrolResultInfo.issueCount!=null){
+                                    <span>${patrolResultInfo.issueCount}处</span>
+                                    @}
+                                    @else{
+                                    <span>无</span>
+                                    @}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="layui-card">
+                            <div class="layui-card-header" style="background-color: #3F4349;color: white">
+                                病害信息
+                            </div>
+                            <div class="layui-card-body">
+                                <div>
+                                    <div class="layui-inline">
+                                        <span id="issueLocation">位置：</span>
+                                        <span>${issueInfo.position}</span>
+                                    </div>
+                                    <div class="layui-inline" style="margin-left: 50px">
+                                        <span id="issueDetectTime">提交时间：</span>
+                                        <span>${issueInfo.detectTime}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="layui-inline">
+                                        <span id="issueStatus">病害情况：</span>
+                                        <span>${issueInfo.hazardStatus}</span>
+                                    </div>
+                                    <div class="layui-inline" style="margin-left: 50px">
+                                        <span id="issueSizeType">尺寸类型：</span>
+                                        <span>${issueInfo.sizeType}</span>
+                                    </div>
+                                    <div class="layui-inline" style="margin-left: 50px">
+                                        <span id="issueSpecificSize">具体尺寸：</span>
+                                        <span>${issueInfo.specificSize}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="layui-inline">
+                                        <span id="issuepotentialHazard">安全隐患：</span>
+                                        <span>${issueInfo.potentialHazard}</span>
+                                    </div>
+                                    <div class="layui-inline" style="margin-left: 50px">
+                                        <span id="issueLevel">级别：</span>
+                                        <span>${issueInfo.issueLevel}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span id="issuedescription">描述：</span>
+                                    <span>${issueInfo.description}</span>
+                                </div>
+                                <div class="layui-inline showImags" id="showImags" style="margin-top: 15px">
+                                    病害图片：
+                                    @if(tool.isEmpty(hazardImgs)){
+                                    <span>暂无图片</span>
+                                    @}
+                                    @else{
+                                    @for(img in hazardImgs){
+                                    <img style="width: 50px;height: 50px;margin-left: 10px" src="${img.name}">
+                                    @}
+                                    @}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="patrolResultIssueListTable"
+                           lay-filter="patrolResultIssueListTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@}

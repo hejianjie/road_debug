@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Appraisal_imgMapper">
+    <sql id="Base_Column_List">
+        appraisal_img_id AS appraisal_img_id,appraisal_id AS appraisal_id,appraisal_img_name AS appraisal_img_name
+    </sql>
+    <select id="selectByAppraisalId" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from appraisal_img where appraisal_id=#{appraisal_id}
+    </select>
+</mapper>

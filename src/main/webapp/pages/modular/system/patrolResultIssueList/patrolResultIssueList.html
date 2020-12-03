@@ -1,0 +1,185 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/patrolResultIssueList/patrolResultIssueList.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">巡查详细信息</span>
+</div>
+
+<div class="layui-fluid" style="background-color: white">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                    <div class="layui-card-header" style="background-color: #3F4349;color: white;margin-left: 0px">
+                        巡查信息
+                    </div>
+                    <div style="margin-top: 1%;margin-left: 18px">
+                        <div class="layui-row layui-col-space5">
+                            <div class="layui-col-md5">
+                                <span id="patrolRoads">巡查路段：</span>
+                                <span>${patrolResultInfo.nationalHighwayName}-${patrolResultInfo.roadSectionName}-${patrolResultInfo.beginStake}~${patrolResultInfo.endStake}</span>
+                            </div>
+                            <div class="layui-col-md5">
+                                <span id="patrolTimes">巡查时间：</span>
+                                <span>${patrolBeginTime}&nbsp~&nbsp${patrolEndTime}</span>
+                            </div>
+                            <div class="layui-col-md2">
+                            </div>
+                        </div>
+                        <div class="layui-row layui-col-space5">
+                            <div class="layui-col-md5">
+                                <span id="patrolOrganization">巡查单位：</span>
+                                <span>${patrolResultInfo.supervisorName}</span>
+                            </div>
+                            <div class="layui-col-md5">
+                                <span id="patrolCar">巡查车辆：</span>
+                                <span>${patrolResultInfo.patrolCar}</span>
+                            </div>
+                            <div class="layui-col-md2">
+                            </div>
+                        </div>
+                        <div class="layui-row layui-col-space5">
+                            <div class="layui-col-md5">
+                                <span id="patrolIssues">问题：</span>
+                                @if(patrolResultInfo.issueCount!=null){
+                                <span>${patrolResultInfo.issueCount}处</span>
+                                @}
+                                @else{
+                                <span>无</span>
+                                @}
+                            </div>
+                            <div class="layui-col-md5">
+                                <span id="patrolerName">巡查员：</span>
+                                <span>${patrolResultInfo.patrolerName}</span>
+                            </div>
+                            <div class="layui-col-md2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    @for(issueInfo in issueInfos){
+                    <div>
+                        <div class="layui-card">
+                            <div class="layui-card-header" style="background-color: #3F4349;color: white">
+                                病害${issueInfoLP.index}
+                            </div>
+                            <div class="layui-card-body">
+                                <div class="layui-row layui-col-space5">
+                                    <div class="layui-col-md5">
+                                        <span id="issueLocation">位置：</span>
+                                        <span>${issueInfo.position}</span>
+                                    </div>
+                                    <div class="layui-col-md5">
+                                        <span id="issueDetectTime">提交时间：</span>
+                                        <span>${issueInfo.detect_time}</span>
+                                    </div>
+                                    <div class="layui-col-md2">
+                                    </div>
+                                </div>
+
+                                <div class="layui-row layui-col-space5">
+                                    <div class="layui-col-md5">
+                                        <span id="issueStatus">病害情况：</span>
+                                        <span>${issueInfo.hazardStatus}</span>
+                                    </div>
+                                    <div class="layui-col-md5">
+                                        <span id="issueSizeType">尺寸类型：</span>
+                                        <span>${issueInfo.sizeType}</span>
+                                    </div>
+                                    <div class="layui-col-md2">
+                                        <span id="issueSpecificSize">具体尺寸：</span>
+                                        <span>${issueInfo.specific_size}</span>
+                                    </div>
+                                </div>
+
+                                <div class="layui-row layui-col-space5">
+                                    <div class="layui-col-md5">
+                                        <span id="issuepotentialHazard">安全隐患：</span>
+                                        <span>${issueInfo.potential_hazard}</span>
+                                    </div>
+                                    <div class="layui-col-md5">
+                                        <span id="issueLevel">级别：</span>
+                                        <span>${issueInfo.issueLevel}</span>
+                                    </div>
+                                    <div class="layui-col-md2">
+                                    </div>
+                                </div>
+
+                                <div class="layui-row layui-col-space5">
+                                    <div class="layui-col-md5">
+                                        <span id="issuedescription">描述：</span>
+                                        <span>${issueInfo.description}</span>
+                                    </div>
+                                    <div class="layui-col-md5">
+
+                                    </div>
+                                    <div class="layui-col-md2">
+                                    </div>
+                                </div>
+                                <div class="layui-row layui-col-space5">
+                                    <div class="layui-col-md5">
+                                        <div class="layui-inline showImags" class="showImags" style="margin-top: 1%; float: left">
+                                            病害图片：
+                                            @if(tool.isEmpty(issueInfo.hazardImgs)){
+                                            <span>暂无图片</span>
+                                            @}
+                                            @else{
+                                            @for(img in issueInfo.hazardImgs){
+                                            <img style="width: 50px;height: 50px;margin-left: 10px" src="/image/${img.name}">
+                                            @}
+                                            @}
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md5">
+                                        <div style="margin-top: 1%;float: right">
+                                            @if(role=="养护站经理"){
+                                            @if(issueInfo.status==3){
+                                            <div class="layui-input-inline">
+                                                <span>(审核待定中)</span>
+                                            </div>
+                                            @}
+                                            @else if(issueInfo.status==1){
+                                            <div class="layui-input-inline">
+                                                <span >审核状态：同意</span>
+                                            </div>
+                                            @}
+                                            @else if(issueInfo.status==2){
+                                            <div class="layui-input-inline">
+                                                <span >审核状态：否决</span>
+                                            </div>
+                                            @}
+                                            @else{
+                                            <div class="layui-input-inline">
+                                                <span>未审核</span>
+                                            </div>
+                                            @}
+                                            <input id="${issueInfoLP.index}roadHazardId" value="${issueInfo.road_hazard_id}"
+                                                   type="hidden">
+                                            @if(tool.isEmpty(issueInfo.appStatus)){
+                                            <div class="layui-input-inline" style="margin-left: 10px">
+                                                <button id="${issueInfoLP.index}btnSubmit" class="layui-btn btnSubmit"
+                                                        data-pid=${issueInfoLP.index}>审核
+                                                </button>
+                                            </div>
+                                            @}
+                                            @}
+                                            <div class="layui-input-inline" style="margin-left: 10px">
+                                                <button id="${issueInfoLP.index}showpro" class="layui-btn showPro"
+                                                        data-hid="${issueInfo.road_hazard_id}">审核进度
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="layui-col-md2">
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    @}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+@}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Road_hazard_imgMapper">
+    <sql id="Base_Column_List">
+        img_id AS imgId,road_hazard_id AS roadHazardId,name AS name
+    </sql>
+    <select id="selectByRoadHazardId" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from road_hazard_img where road_hazard_id=#{roadHazardId}
+    </select>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beyond.zjxt.modular.road.mapper.Cost_evaluation_company_road_hazardMapper">
+
+    <select id="getCompanyList" resultType="java.util.Map">
+        select sys_user.user_id,sys_user.account,sys_user.name,sys_user.email,sys_user.phone
+        from sys_user join sys_role  on sys_user.role_id = sys_role.role_id
+        where sys_role.name='第三方造价评估公司' and sys_user.name like concat('%',#{companyName},'%')
+    </select>
+
+    <select id="getCompanyListForSelector" resultType="java.util.Map">
+        select sys_user.user_id,sys_user.account,sys_user.name,sys_user.email,sys_user.phone
+        from sys_user join sys_role  on sys_user.role_id = sys_role.role_id
+        where sys_role.name='第三方造价评估公司'
+    </select>
+
+    <select id="getByApplicationId" resultType="java.util.Map">
+        select *
+        from cost_evaluation_company_road_hazard
+        where application_id =#{applicationId}
+    </select>
+</mapper>

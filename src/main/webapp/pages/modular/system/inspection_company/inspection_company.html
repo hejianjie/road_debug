@@ -1,0 +1,31 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/system/inspection_company/inspection_company.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">第三方核量公司</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-form toolbar">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <input id="thirdPartyName" class="layui-input" type="text" placeholder="公司名称"/>
+                            </div>
+                            <div class="layui-inline">
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="layui-table" id="thirdPartyTable" lay-filter="thirdPartyTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@}

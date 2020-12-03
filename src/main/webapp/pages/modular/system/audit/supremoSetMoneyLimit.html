@@ -1,0 +1,24 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/audit/supremoSetMoneyLimit.js"]}){
+<div class="layui-body-header">
+    <span class="layui-body-header-title">待审核列表</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" value="${money}" lay-verify="number" id="maneyLimit" placeholder="请输入自动审核金额">
+                    </div>
+                    <div class="layui-input-inline">
+                        元
+                    </div>
+
+                    <button class="layui-btn" id="autoAudit" style="float: right">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@}

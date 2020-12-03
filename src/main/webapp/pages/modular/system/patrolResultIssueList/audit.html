@@ -1,0 +1,28 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/patrolResultIssueList/audit.js"]}){
+
+<div class="layui-body-header">
+    <span class="layui-body-header-title">审核</span>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card" style="margin-top: 20px">
+                <div class="layui-card-body">
+                    <div class="layui-input-inline" id="opinion">
+                        <input type="radio"  name="t" value="1" title="同意"/>同意
+                        <input type="radio" name="t" value="2" title="否决"/>否决
+                        <input type="radio" name="t" value="3" title="待定"/>待定
+                    </div>
+                    <div class="layui-input-inline">
+                        <input type="hidden" id="roadHazardId" value="${roadHazardId}">
+                        <button class="layui-btn" id="submit">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="tableBar">
+    <a class="layui-btn" lay-event="showInfo">查看</a>
+</script>
+@}
