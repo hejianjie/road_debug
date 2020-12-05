@@ -22,37 +22,37 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
     /**
      * 初始化表格的列
      */
-    appraisal.initColumn = function () {
-        return [[
-            {field: 'zizeng',  title: '序号',type:'numbers'},
-            {field:'id',hide:true,title:'id'},
-            {field:'money',title:'评估价格',templet:function (d) {
-                if (d.cost_price){
-                    return d.cost_price
-                }else{
-                    return "未评估"
-                }
-                }},
-            {field: 'patrolResultId', hide: true, sort: true, title: 'id',templet:function (d) {
-                    if (d.patrolResultId==1){
-                        return 'ID：'+ d.patrolResultId +'，标题：<span style="color: #c00;">'+ d.title +'</span>'
-                    }
-                }},
-            {field:'dept',title:'评估单位',templet:function (d) {
-
-                    return d.name
-                }},
-            {field: 'time', sort: true, title: '评估时间',templet:function (d) {
-                if(d.appraisal_time)
-                    {return d.appraisal_time}
-                    else{
-                    return "未评估"
-                }
-                }},
-            {align: 'center', toolbar: '#tableBar1', title: '操作', minWidth: 200}
-
-        ]];
-    };
+    // appraisal.initColumn = function () {
+    //     return [[
+    //         {field: 'zizeng',  title: '序号',type:'numbers'},
+    //         {field:'id',hide:true,title:'id'},
+    //         {field:'money',title:'评估价格',templet:function (d) {
+    //             if (d.cost_price){
+    //                 return d.cost_price
+    //             }else{
+    //                 return "未评估"
+    //             }
+    //             }},
+    //         {field: 'patrolResultId', hide: true, sort: true, title: 'id',templet:function (d) {
+    //                 if (d.patrolResultId==1){
+    //                     return 'ID：'+ d.patrolResultId +'，标题：<span style="color: #c00;">'+ d.title +'</span>'
+    //                 }
+    //             }},
+    //         {field:'dept',title:'评估单位',templet:function (d) {
+    //
+    //                 return d.name
+    //             }},
+    //         {field: 'time', sort: true, title: '评估时间',templet:function (d) {
+    //             if(d.appraisal_time)
+    //                 {return d.appraisal_time}
+    //                 else{
+    //                 return "未评估"
+    //             }
+    //             }},
+    //         {align: 'center', toolbar: '#tableBar1', title: '操作', minWidth: 200}
+    //
+    //     ]];
+    // };
 
     var tableResult = table.render({
         elem: '#' + appraisal.tableId,

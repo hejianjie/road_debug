@@ -419,9 +419,25 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
         }, function (data) {
             Feng.error("操作失败！" + data.responseJSON.message)
         });
-        ajax.start();
-        form.render();
-        admin.closeThisDialog();
+
+
+        layer.confirm('请选择处理方式', {
+            btn: ['重新填报 ','直接否决'] //按钮
+        }, function(){
+            //重新填报
+            layer.msg('重新填报', {icon: 1});
+            //ajax.start();
+            form.render();
+            admin.closeThisDialog();
+
+        }, function(){
+            直接否决
+             ajax.start();
+            form.render();
+            admin.closeThisDialog();
+
+        });
+
     })
     form.render();
 
@@ -512,7 +528,8 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
     //     }
     // });
     $(".showPro").click(function () {
-        var hid=$("#roadHarzardId").val();
+        // var hid=$("#roadHarzardId").val();
+        var hid=$(this).data("hid");
         onShow(hid);
     });
     var onShow=function(hid){

@@ -54,6 +54,15 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
         ]];
     };
 
+    var options={
+        //elem: '#' + roadHazardCountyFirstTrialList.tableId,
+        url: Feng.ctxPath + '/roadhazard/countyFirstTrialRoadHazardList',
+        page: true,
+        limit:40,
+        height: "full-98",
+        cellMinWidth: 100,
+        cols: roadHazardCountyFirstTrialList.initColumn()
+    }
     /**
      * 点击编辑部门
      *
@@ -68,7 +77,9 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
             area: ['1000px', '800px'],
             content: Feng.ctxPath+'/application/findByRoadHazardIdCountyFirstTrial/'+data.road_hazard_id,
             end: function () {
-                admin.getTempData('formOk') && table.reload(roadHazardCountyFirstTrialList.tableId);
+                //alert("wocao");
+                admin.getTempData('formOk');
+                table.reload(roadHazardCountyFirstTrialList.tableId,options);
             }
         });
     };
