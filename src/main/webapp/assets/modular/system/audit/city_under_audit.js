@@ -64,9 +64,30 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
         ]]
     }
 
+    var options={
+       // elem: '#' + CityUnderAudit.tableId,
+        url: Feng.ctxPath + '/application/cityDeptUnderAuditList?role='+"市区审核人1",
+        page: true,
+        limit:40,
+        height: "full-98",
+        cellMinWidth: 100,
+        cols: CityUnderAudit.initColumn()
+    }
 
     CityUnderAudit.audit = function (data) {
-        window.location.href=Feng.ctxPath+'/application/cityAuditPage?audited=0&applicationId='+data.applicationId;
+        // window.location.href=Feng.ctxPath+'/application/cityAuditPage?audited=0&applicationId='+data.applicationId;
+        admin.putTempData('formOk', false);
+        top.layui.admin.open({
+            type: 2,
+            title: '审核信息',
+            area: ['1000px', '800px'],
+            content: Feng.ctxPath+'/application/cityAuditPage?audited=0&applicationId='+data.applicationId,
+            end: function () {
+                //alert("wocao");
+                admin.getTempData('formOk');
+                table.reload(CityUnderAudit.tableId,options);
+            }
+        });
     };
 
     // 渲染表格

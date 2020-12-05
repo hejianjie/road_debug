@@ -16,8 +16,8 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
 
     CityUnderAudit.initColumn=function () {
         return [[
+            {type: 'checkbox', fixed: 'left'},
             {field: 'zizeng',  title: '序号',type:'numbers'},
-
             {field:'highway_name', title: '路线'},
             {field:'road_section_name', title: '路段'},
             {field:'position', title: '具体位置'},
@@ -77,6 +77,8 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
     var tableResult = table.render({
         elem: '#' + CityUnderAudit.tableId,
         url: Feng.ctxPath + '/application/cityExecutiveUnderAuditList',
+        toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+        defaultToolbar:[],
         page: true,
         limit:40,
         height: "full-98",
@@ -90,5 +92,39 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
         if (layEvent === 'audit') {
             CityUnderAudit.audit(data);
         }
+    });
+    //头工具栏事件
+    table.on('toolbar(cityUnderAuditTb)', function(obj){
+        var checkStatus = table.checkStatus(obj.config.id);
+        var data = checkStatus.data;
+        console.log(data)
+        if(obj.event === 'batchProcessing')
+        {
+            // for(var i=0;i<data.length;i++)
+            // {
+            //     CityUnderAudit.audit(data[i]);
+            // }
+        }
+
+        // switch(obj.event){
+        //     case 'batchProcessing':
+        //         var data = checkStatus.data;
+        //         console.log(data)
+        //
+        //         layer.alert(JSON.stringify(data));
+        //         break;
+        //     case 'getCheckData':
+        //         var data = checkStatus.data;
+        //         layer.alert(JSON.stringify(data));
+        //         break;
+        //     case 'getCheckLength':
+        //         var data = checkStatus.data;
+        //         layer.msg('选中了：'+ data.length + ' 个');
+        //         break;
+        //     case 'isAll':
+        //         layer.msg(checkStatus.isAll ? '全选': '未全选');
+        //         break;
+        //
+        // };
     });
 })
