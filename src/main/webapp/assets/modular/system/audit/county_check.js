@@ -674,7 +674,8 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                 area: ['1000px', '800px'],
                 content: Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptance_id+'/'+data.road_hazard_id,
                 end: function () {
-                    admin.getTempData('formOk') && table.reload(roadHazardCountyFirstTrialList.tableId);
+                    admin.getTempData('formOk');
+                    table.reload(roadHazardCountyFirstTrialList.tableId);
                 }
             });
         }else{
@@ -709,6 +710,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             ajax.start();
             window.location.reload()
             form.render();
+            admin.closeThisDialog();
         }
         else if(roleId +'' ==='14'||roleId +'' === '1202130817007374338'){
             var ajax = new $ax(Feng.ctxPath + "/acceptance/secondAuditor?id="+userId+"&result=1&acceptanceId="+acceptanceId+"&applicationId="+applicationId+"&status="+"11", function (data) {
@@ -719,6 +721,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             ajax.start();
             window.location.reload()
             form.render();
+            admin.closeThisDialog();
         }
 
     })
@@ -732,6 +735,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             ajax.start();
             window.location.reload()
             form.render();
+            admin.closeThisDialog();
         }
         else if(roleId +'' ==='14'||roleId +'' === '1202130817007374338'){
             var ajax = new $ax(Feng.ctxPath + "/acceptance/secondAuditor?id="+userId+"&result=0&acceptanceId="+acceptanceId+"&applicationId="+applicationId+"&status="+"11", function (data) {
@@ -742,6 +746,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             ajax.start();
             window.location.reload()
             form.render();
+            admin.closeThisDialog();
             // var ajax2 = new $ax(Feng.ctxPath + "/inspectionCompany/addInspectionCompany?third_party_id="+pid+"&application_id="+applicationId, function (data) {
             //     //Feng.success("指派成功！");
             //     location.reload();

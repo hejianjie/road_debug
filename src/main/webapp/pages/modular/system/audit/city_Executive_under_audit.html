@@ -9,7 +9,7 @@
             <div class="layui-card">
                 <div class="layui-card-body">
                     <div class="layui-form toolbar">
-                        <table class="layui-table" id="cityUnderAuditTb" lay-filter="cityUnderAuditTb"></table>
+                        <table class="layui-table" id="cityUnderAuditTb" lay-data="{id: 'cityUnderAuditTb'}"  lay-filter="cityUnderAuditTb"></table>
                     </div>
                 </div>
             </div>
@@ -24,9 +24,9 @@
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="batchProcessing">批量处理</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+        <!--<button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>-->
+        <!--<button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
+        <!--<button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>-->
     </div>
 </script>
 

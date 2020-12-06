@@ -16,6 +16,7 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
 
     SupremoUnderAudit.initColumn=function () {
         return [[
+            {type: 'checkbox', fixed: 'left'},
             {field: 'zizeng',  title: '序号',type:'numbers'},
 
             {field:'highway_name', title: '路线'},
@@ -107,10 +108,23 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
         });
     })
 
+    var options={
+        url: Feng.ctxPath + '/application/supremoUnderAuditList',
+        toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+        defaultToolbar:[],
+        page: true,
+        limit:40,
+        height: "full-98",
+        cellMinWidth: 100,
+        cols: SupremoUnderAudit.initColumn()
+    }
+
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + SupremoUnderAudit.tableId,
         url: Feng.ctxPath + '/application/supremoUnderAuditList',
+        toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+        defaultToolbar:[],
         page: true,
         limit:40,
         height: "full-98",
@@ -125,4 +139,76 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
             SupremoUnderAudit.audit(data);
         }
     });
+
+    //头工具栏事件
+    table.on('toolbar(supremoUnderAuditTb)', function(obj){
+        var checkStatus = table.checkStatus(obj.config.id);
+        var data = checkStatus.data;
+        console.log(data);
+        if(obj.event === 'batchProcessing')
+        {
+            if(data.length === 0)
+            {
+                layer.msg('尚未选择任何数据', {icon: 5});
+            }else {
+                var check=layer.confirm('请选择处理方式', {
+                    btn: ['批量同意', '批量拒绝'] //按钮
+                }, function () {
+
+                    var layerload=layer.load(2, {shade: false});
+                    layer.close(check);
+                    for(var i=0;i<data.length;i++)
+                    {
+                        var ajax = new $ax(Feng.ctxPath + "/application/updateSupremoStatus?status=" + "同意" + "&applicationId=" + data[i].applicationId, function () {
+                            Feng.success("审核成功");
+                        }, function () {
+                            Feng.error("审核失败！" + data.responseJSON.message)
+                        });
+                        ajax.set();
+                        ajax.start();
+                    }
+
+                    table.reload(SupremoUnderAudit.tableId, options);
+                    layer.close(layerload);
+                }, function () {
+                    var layerload=layer.load(2, {shade: false});
+                    layer.close(check);
+                    for(var i=0;i<data.length;i++)
+                    {
+                        var ajax = new $ax(Feng.ctxPath + "/application/updateSupremoStatus?status=" + "否决" + "&applicationId=" + data[i].applicationId, function () {
+                            Feng.success("审核成功");
+                        }, function () {
+                            Feng.error("审核失败！" + data.responseJSON.message)
+                        });
+                        ajax.set();
+                        ajax.start();
+                    }
+
+                    table.reload(SupremoUnderAudit.tableId, options);
+                    layer.close(layerload);
+                })
+            }
+
+            // switch(obj.event){
+            //     case 'batchProcessing':
+            //         var data = checkStatus.data;
+            //         console.log(data)
+            //
+            //         layer.alert(JSON.stringify(data));
+            //         break;
+            //     case 'getCheckData':
+            //         var data = checkStatus.data;
+            //         layer.alert(JSON.stringify(data));
+            //         break;
+            //     case 'getCheckLength':
+            //         var data = checkStatus.data;
+            //         layer.msg('选中了：'+ data.length + ' 个');
+            //         break;
+            //     case 'isAll':
+            //         layer.msg(checkStatus.isAll ? '全选': '未全选');
+            //         break;
+            //
+            // };
+        }});
+
 })

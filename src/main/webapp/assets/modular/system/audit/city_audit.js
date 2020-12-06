@@ -181,6 +181,13 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
         }
     })
 
+    
+
+    $('#updatemsg').click(function () {
+
+    })
+
+    }
     $('#commit').click(function () {
         var comment=$('#feedback').val();
         console.log(comment);

@@ -127,10 +127,20 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
             area: ['80%', '80%'],
             content: Feng.ctxPath+'/roadhazard?patrolResultId='+data.patrolResultId,
             end: function () {
-                admin.getTempData('formOk') && table.reload(Dept.tableId);
+                admin.getTempData('formOk');
+                table.reload(Dept.tableId,options);
             }
         });
     };
+
+    var options={
+        url: Feng.ctxPath + '/patrolresult/list',
+        page: true,
+        height: "full-200",
+        limit:40,
+        cellMinWidth: 100,
+        cols: PatrolResult.initColumn()
+    }
 
     // 渲染表格
     var tableResult = table.render({

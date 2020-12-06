@@ -96,7 +96,8 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
             area: ['1000px', '800px'],
             content: Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptance_id+'/'+data.road_hazard_id,
             end: function () {
-                admin.getTempData('formOk') && table.reload(roadHazardCountyFirstTrialList.tableId);
+                admin.getTempData('formOk');
+                table.reload(roadHazardCountyFirstTrialList.tableId,options);
             }
         });
     };
@@ -110,10 +111,19 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
             area: ['1000px', '800px'],
             content: Feng.ctxPath+'/acceptance/addHl?roadHazardId='+data.road_hazard_id,
             end: function () {
-                admin.getTempData('formOk') && table.reload(roadHazardCountyFirstTrialList.tableId);
+                admin.getTempData('formOk') ;
+                table.reload(roadHazardCountyFirstTrialList.tableId,options);
             }
         });
     };
+
+    var options={
+        url: Feng.ctxPath + '/acceptance/selectPendingQuantityCountyList',
+        page: true,
+        height: "full-98",
+        cellMinWidth: 100,
+        cols: roadHazardCountyFirstTrialList.initColumn()
+    }
 
     // 渲染表格
     var tableResult = table.render({

@@ -73,6 +73,18 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
         window.location.href=Feng.ctxPath+'/application/cityAuditPage?audited=0&applicationId='+data.applicationId;
     };
 
+    var options ={
+        //elem: '#' + CityUnderAudit.tableId,
+        url: Feng.ctxPath + '/application/cityExecutiveUnderAuditList',
+        toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+        defaultToolbar:[],
+        page: true,
+        limit:40,
+        height: "full-98",
+        cellMinWidth: 100,
+        cols: CityUnderAudit.initColumn()
+    }
+
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + CityUnderAudit.tableId,
@@ -97,13 +109,70 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
     table.on('toolbar(cityUnderAuditTb)', function(obj){
         var checkStatus = table.checkStatus(obj.config.id);
         var data = checkStatus.data;
-        console.log(data)
+        console.log(data);
         if(obj.event === 'batchProcessing')
         {
-            // for(var i=0;i<data.length;i++)
-            // {
-            //     CityUnderAudit.audit(data[i]);
-            // }
+            if(data.length === 0)
+            {
+                layer.msg('尚未选择任何数据', {icon: 5});
+            }else {
+                var check=layer.confirm('请选择处理方式', {
+                    btn: ['批量同意', '批量拒绝'] //按钮
+                }, function () {
+                    var comment="无意见";
+                    // for(var i=0;i<data.length;i++)
+                    // {
+                    //     alert(i);
+                    //     alert(data[i].applicationId);
+                    // }
+                    layer.prompt({title: '请输入审核意见，并确认', formType: 2}, function(text, index){
+                        comment=text;
+                        layer.close(index);
+                        layer.close(check);
+                        var layerload=layer.load(2, {shade: false});
+
+                        for(var i=0;i<data.length;i++)
+                        {
+                            var ajax = new $ax(Feng.ctxPath + "/application/updateCityAuditResult?auditSuggestion=" + "同意" + "&feedback=" + comment + "&applicationId=" + data[i].applicationId+"&reff=0", function () {
+                                Feng.success("审核成功");
+
+                            }, function () {
+                                Feng.error("审核失败！" + data.responseJSON.message)
+                            });
+                            ajax.set();
+                            ajax.start();
+                        }
+
+                        layer.close(layerload);
+                        table.reload(CityUnderAudit.tableId, options);
+
+                    });
+
+                }, function () {
+                    var comment="无意见";
+                    layer.prompt({title: '请输入审核意见，并确认', formType: 2}, function(text, index){
+                        comment=text;
+                        layer.close(index);
+                        layer.close(check);
+                        var layerload=layer.load(2, {shade: false});
+
+                        for(var i=0;i<data.length;i++)
+                        {
+                            var ajax = new $ax(Feng.ctxPath + "/application/updateCityAuditResult?auditSuggestion=" + "否决" + "&feedback=" + comment + "&applicationId=" + data[i].applicationId+"&reff=0", function () {
+                                Feng.success("审核成功");
+
+                            }, function () {
+                                Feng.error("审核失败！" + data.responseJSON.message)
+                            });
+                            ajax.set();
+                            ajax.start();
+                        }
+
+                        layer.close(layerload);
+                        table.reload(CityUnderAudit.tableId, options);
+
+                    });
+            })
         }
 
         // switch(obj.event){
@@ -126,5 +195,5 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form'], function () {
         //         break;
         //
         // };
-    });
+    }});
 })

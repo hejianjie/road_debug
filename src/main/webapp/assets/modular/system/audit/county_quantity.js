@@ -431,6 +431,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                     console.log(Data)
                     parent.location.reload()
                     alert("保存成功！")
+                    admin.closeThisDialog();
                 },error:function (Data) {
                     console.log(Data)
                     window.location.reload()
@@ -474,6 +475,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             admin.closeThisDialog();
         }, function (data) {
             Feng.error("核量失败！" )
+            admin.closeThisDialog();
         });
         ajax.start();
     });
