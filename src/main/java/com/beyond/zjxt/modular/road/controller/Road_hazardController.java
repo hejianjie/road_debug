@@ -484,11 +484,11 @@ public class Road_hazardController extends BaseController {
     @CrossOrigin
     @PostMapping("/updateOneRoadProblem")
     @ResponseBody
-    public Object updateOne(@RequestParam("roadHazardId")int roadHazardId,  @RequestParam("position")int position,
+    public Object updateOne(@RequestParam("roadHazardId")int roadHazardId,  @RequestParam("position")String position,
                             @RequestParam("hazardStatus")int hazardStatus, @RequestParam("sizeType")int sizeType,
-                            @RequestParam("specificSize")int specificSize, @RequestParam("potentialHazard")String potentialHazard, @RequestParam("description")float description,
-                            @RequestParam("longitude")float longitude, @RequestParam("latitude")int latitude, @RequestParam("patrolResultId")String patrolResultId,
-                            @RequestParam("userId")float userId){
+                            @RequestParam("specificSize")String specificSize, @RequestParam("potentialHazard")String potentialHazard, @RequestParam("description")String description,
+                            @RequestParam("longitude")float longitude, @RequestParam("latitude")float latitude, @RequestParam("patrolResultId")int patrolResultId,
+                            @RequestParam("userId")int userId){
 
         UpdateWrapper<Road_hazard> uw=new UpdateWrapper<>();
         uw.eq("road_hazard_id",roadHazardId);
