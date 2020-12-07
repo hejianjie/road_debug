@@ -2,6 +2,7 @@ package com.beyond.zjxt.modular.road.controller;
 
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beyond.zjxt.core.common.page.LayuiPageFactory;
 import com.beyond.zjxt.core.shiro.ShiroKit;
@@ -479,6 +480,35 @@ public class Road_hazardController extends BaseController {
         Integer num= roadHazard.getRoadHazardId();
         return num;
     }
+
+    @CrossOrigin
+    @PostMapping("/updateOneRoadProblem")
+    @ResponseBody
+    public Object updateOne(@RequestParam("roadHazardId")int roadHazardId,  @RequestParam("position")int position,
+                            @RequestParam("hazardStatus")int hazardStatus, @RequestParam("sizeType")int sizeType,
+                            @RequestParam("specificSize")int specificSize, @RequestParam("potentialHazard")String potentialHazard, @RequestParam("description")float description,
+                            @RequestParam("longitude")float longitude, @RequestParam("latitude")int latitude, @RequestParam("patrolResultId")String patrolResultId,
+                            @RequestParam("userId")float userId){
+
+        UpdateWrapper<Road_hazard> uw=new UpdateWrapper<>();
+        uw.eq("road_hazard_id",roadHazardId);
+
+        uw.set("position",position);
+        uw.set("hazard_status",hazardStatus);
+        uw.set("size_type",sizeType);
+        uw.set("specific_size",specificSize);
+        uw.set("potential_hazard",potentialHazard);
+        uw.set("description",description);
+        uw.set("longitude",longitude);
+        uw.set("latitude",latitude);
+        uw.set("patrol_result_id",patrolResultId);
+        uw.set("user_id",userId);
+
+        roadHazardService.update(uw);
+        return ResponseData.success();
+    }
+
+
     /**
      * 删除病害信息
      * wdz

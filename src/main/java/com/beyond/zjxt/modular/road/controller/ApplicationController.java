@@ -599,9 +599,6 @@ public class ApplicationController extends BaseController {
         Long date1 = Long.parseLong(dateTime);
         Date Time = new Date(date1);
 
-
-
-
         UpdateWrapper<Application> uw=new UpdateWrapper<>();
         uw.eq("road_hazard",roadHazardId);
         uw.set("type_selection",construct_type);
