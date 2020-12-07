@@ -157,12 +157,15 @@ public class InspectorController {
     }
 
     @PostMapping("/patrol/end")
-    public Map<String, Object> patrolEnd(@RequestParam("patrolResultId") Integer patrolResultId) {
+    public Map<String, Object> patrolEnd(@RequestParam("patrolResultId") Integer patrolResultId, @RequestParam(value = "stakeEndId") Integer stakeEndId) {
         Map<String, Object> map = new HashMap<>();
         map.put("statusCode", 1);
         map.put("msg", "SUCCESS");
         IPatrolResult iPatrolResult = iPatrolResultRepository.findById(patrolResultId).orElse(null);
         iPatrolResult.setEndTime(new Date());
+//        if (!ObjectUtils.isEmpty(stakeEndId)){
+//        }
+        iPatrolResult.setStakeEndId(stakeEndId);
         map.put("data", iPatrolResultRepository.save(iPatrolResult));
         return map;
     }
