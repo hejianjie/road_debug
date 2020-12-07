@@ -1,5 +1,6 @@
 package com.beyond.zjxt.modular.road.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beyond.zjxt.modular.road.entity.Application;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -22,6 +23,8 @@ import java.util.Map;
 @Mapper
 public interface ApplicationMapper extends BaseMapper<Application> {
     List<Map<String, Object>> selectOne(int applicationId);
+
+    Application selectbyRId(int roadHazardId);
 
     Integer getStatus(Integer applicationId);
 

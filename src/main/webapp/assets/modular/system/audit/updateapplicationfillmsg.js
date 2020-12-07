@@ -9,7 +9,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
     var dateTime1 = 0;
     var roadHazardId = parseInt($("#roadHazardId").val());
     var patrolResultId = parseInt($("#patrolResultId").val());
-    console.log(roadHazardId)
+//    console.log(roadHazardId)
     var applicationId = 0;
 
     // var laydate = layui.laydate;
@@ -27,6 +27,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
     var unitType = -1;
     var unitStyle = -1;
 
+    var applicationId=-1;
 
 
     $.ajax({
@@ -61,7 +62,8 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                 contentType: "application/json; charset=utf-8",
                 success: function (data1) {
                     if(data1.length === 0){
-                        console.log(data1)
+                        console.log("xxxx")
+                      console.log(data1)
                         $("#fillForm").show();
                         $("#submitButton").show();
 
@@ -74,7 +76,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                             dataType: 'json',
                             contentType: "application/json;charset=utf-8",
                             success:function(hazardInfo){
-                                console.log(hazardInfo)
+                         //       console.log(hazardInfo)
                                 form.val("applicationForm",{
                                     "road_hazard_status":hazardInfo[0].name,//病害情况
                                     "work_frequency":1,
@@ -91,7 +93,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                             dataType: 'json',
                             contentType: "application/json; charset=utf-8",
                             success: function (data1) {
-                                console.log(data1)
+                          //      console.log(data1)
                                 $("#hazard_unit").empty();
                                 if(data1.length!=0){
                                     // $('#hazard_unit').append(new Option('请选择单位', ''));
@@ -210,7 +212,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                         })
                     }else
                     {
-                        console.log(data1)
+                    //    console.log(data1)
                         applicationId = data1[0].application_id
                         if(data1[0].status+'' === '1'){
                             $("#editButton").show();
@@ -239,7 +241,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                             dataType: 'json',
                             contentType: "application/json;charset=utf-8",
                             success:function(hazardData){
-                                console.log(hazardData)
+                           //     console.log(hazardData)
                                 $.ajax({
                                     type: "get",
                                     url: Feng.ctxPath + '/hazard_base_info/getOne',
@@ -247,7 +249,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                                     dataType: 'json',
                                     contentType: "application/json;charset=utf-8",
                                     success:function(hazardInfo){
-                                        console.log(hazardInfo)
+                                  //      console.log(hazardInfo)
                                         form.val("applicationForm",{
                                             "road_hazard_status":hazardInfo[0].name,//病害情况
                                         })
@@ -267,8 +269,8 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                             success: function (data11) {
                                 if(data1.length!=0){
                                     $.each(data11, function(index, item) {
-                                        console.log(item.construct_type_id)
-                                        console.log(data1[0].type_selection)
+                                    //    console.log(item.construct_type_id)
+                                     //   console.log(data1[0].type_selection)
                                         if(item.construct_type_id+'' === data1[0].type_selection+'') {
 
                                             structType = item.construct_type_id;
@@ -305,12 +307,12 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                                                         data:{constructProjectId:data1[0].project_name},
                                                         dataType:"json",
                                                         success:function(data111){
-                                                            console.log(data111)
+                                                        //    console.log(data111)
                                                             if(data111.length != 0){
                                                                 $("#construct_project_detail").empty();
                                                                 $('#construct_project_detail').append(new Option('请选择细目', ''));
                                                                 $.each(data111, function(index, item) {
-                                                                    console.log(item.construct_project_detail_id)
+                                                               //     console.log(item.construct_project_detail_id)
                                                                     option = new Option(item.construct_project_detail_name, item.construct_project_detail_id);
                                                                     if(item.construct_project_detail_id+'' === item.construct_project_detail_id+'') {
                                                                         option.setAttribute("selected", 'true')
@@ -339,7 +341,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                             dataType: 'json',
                             contentType: "application/json; charset=utf-8",
                             success: function (data11) {
-                                console.log(data11)
+                            //    console.log(data11)
                                 $("#hazard_unit").empty();
                                 if(data11.length!=0){
                                     // $('#hazard_unit').append(new Option('请选择单位', ''));
@@ -487,7 +489,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                             dataType: 'json',
                             contentType: "application/json;charset=utf-8",
                             success:function(userData){
-                                console.log(userData)
+                           //     console.log(userData)
                                 form.val("applicationForm",{
                                     "county_applicant":userData[0].name,
                                 })
@@ -522,7 +524,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                                 dataType: 'json',
                                 contentType: "application/json;charset=utf-8",
                                 success:function(userData){
-                                    console.log(userData)
+                              //      console.log(userData)
                                     form.val("applicationForm",{
                                         "auditor_one":userData[0].name+'--'+data1[0].auditor_one_result,
                                         "auditor_one_time":data1[0].auditor_one_time,
@@ -540,7 +542,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                                 dataType: 'json',
                                 contentType: "application/json;charset=utf-8",
                                 success:function(userData){
-                                    console.log(userData)
+                              //      console.log(userData)
                                     form.val("applicationForm",{
                                         "auditor_two":userData[0].name+'--'+data1[0].auditor_two_result,
                                         "auditor_two_time":data1[0].auditor_two_time,
@@ -558,7 +560,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                                 dataType: 'json',
                                 contentType: "application/json;charset=utf-8",
                                 success:function(userData){
-                                    console.log(userData)
+                              //      console.log(userData)
                                     form.val("applicationForm",{
                                         "auditor_one_city":userData[0].name+'--'+data1[0].city_dept_head_status,
                                         "fb_1":data1[0].city_dept_head_fb,
@@ -578,7 +580,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                                 dataType: 'json',
                                 contentType: "application/json;charset=utf-8",
                                 success:function(userData){
-                                    console.log(userData)
+                             //       console.log(userData)
                                     form.val("applicationForm",{
                                         "auditor_two_city":userData[0].name+'--'+data1[0].city_executive_status,
                                         "fb_2":data1[0].city_executive_fb,
@@ -613,8 +615,8 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                 $('#construct_type').append(new Option('请选择建设性质', ''));
                 $.each(data1, function(index, item) {
                     option = new Option(item.construct_type_name, item.construct_type_id)
-                    console.log(item.construct_type_id)
-                    console.log(structType)
+                 //   console.log(item.construct_type_id)
+                 //   console.log(structType)
                     if(item.construct_type_id+'' === structType+''){
                         option.setAttribute("selected",'true')
                     }
@@ -634,7 +636,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (data1) {
-            console.log(data1)
+         //   console.log(data1)
             $("#construct_project").empty();
             if(data1.length!=0){
                 $('#construct_project').append(new Option('请选择项目', ''));
@@ -973,84 +975,81 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
     });
     //修改
     form.on('submit(demo2)', function (data) {
-        //layer.msg(JSON.stringify(data.field));
-        $.ajax({
-                url:Feng.ctxPath + "/application/deleteApplication",
-                type:"POST",
-                data:{id:applicationId},
-                dataType:"json",
-                success:function(result){
-                    console.log(JSON.stringify(data.field))
-                    console.log(data.field.road_hazard_status)
-                    //var articleFrom = data.field.articleFrom;
-                    var specificSize = 0;
-                    switch(data.field.hazard_unit){
-                        case '1':
-                            specificSize = data.field.specific_size1+','+data.field.specific_size2+','+data.field.specific_size3
-                            break;
-                        case '2':
-                            specificSize = data.field.specific_size4+','+data.field.specific_size5
-                            break;
-                        case '3':
-                            specificSize = data.field.specific_size6
-                            break;
-                        case '4':
-                            specificSize = data.field.specific_size7
-                            break;
-                    }
-                    var addOne ={
-                        "roadHazardId":roadHazardId,
-                        "userId":userId,
-                        "construct_type":data.field.construct_type,
-                        "construct_project":data.field.construct_project,
-                        "construct_project_detail":data.field.construct_project_detail,
-                        "hazard_unit":data.field.hazard_unit,
-                        "specificSize":specificSize,
-                        "work_amount":data.field.work_amount,
-                        "unit_price":data.field.unit_price,
-                        "unit_price_type":data.field.unit_price_type,
-                        "work_frequency":data.field.work_frequency,
-                        "appraisal_cost":data.field.appraisal_cost,
-                        "date":data.field.date,
-                        "estimated_finish_time":data.field.estimated_finish_time,
-                    }
-                    console.log(data.field.date)
-                    console.log(addOne.date)
-                    var addTime = new Date(data.field.estimated_finish_time).toLocaleDateString().replace('/','-').replace('/','-')
-                    console.log(addTime)
-                    var ajax = new $ax(Feng.ctxPath + "/application/add?roadHazardId="+parseInt($("#roadHazardId").val())+"&userId="+parseInt($("#userId").val())+"&construct_type="+data.field.construct_type+
-                        "&construct_project="+data.field.construct_project+
-                        "&construct_project_detail="+data.field.construct_project_detail+
-                        "&hazard_unit="+data.field.hazard_unit+
-                        "&specificSize='"+specificSize+
-                        "'&work_amount="+data.field.work_amount+
-                        "&unit_price="+data.field.unit_price+
-                        "&unit_price_type="+data.field.unit_price_type+
-                        "&work_frequency='"+data.field.work_frequency+
-                        "'&appraisal_cost="+data.field.appraisal_cost+
-                        "&date='"+data.field.date+
-                        "'&estimated_finish_time="+data.field.estimated_finish_time+
-                        "&dateTime="+dateTime1, function (data) {
-                        admin.closeThisDialog();
-                        window.parent.location.reload();
-                        Feng.success("修改成功！");
-                    }, function (data) {
-                        Feng.error("修改失败！" + data.responseJSON.message)
-                    });
-                    // ajax.set(data.field);
-                    ajax.start();
-                    //var articleSummary = data.field.articleSummary;
-                }
 
-            })
+        console.log(data.field.road_hazard_status)//病害状况
+        console.log("data.field.construct_type")
+        console.log(data.field.construct_type)//建设性质
+        console.log("data.field.construct_project")
+        console.log(data.field.construct_project)//项目名称
+        console.log("data.field.construct_project_detail")
+        console.log(data.field.construct_project_detail)//项目细则名称
+        console.log("data.field.hazard_unit")
+        console.log(data.field.hazard_unit)//单位
+        console.log("data.field.work_amount")
+        console.log(data.field.work_amount)//工程量
+        console.log("data.field.unit_price")
+        console.log(data.field.unit_price)//单价
+        console.log("data.field.unit_price_type")
+        console.log(data.field.unit_price_type)//单价种类
+        console.log("data.field.work_frequency")
+        console.log(data.field.work_frequency)//作业频率
+        console.log("data.field.appraisal_cost")
+        console.log(data.field.appraisal_cost)//预估费用
+        console.log("data.field.date")
+        console.log(data.field.date)//时限日期
+        console.log(" data.field.estimated_finish_time")
+        console.log( data.field.estimated_finish_time)//完成时限
 
+        var specificSize = 0;
+        switch(data.field.hazard_unit){
+            case '1':
+                specificSize = data.field.specific_size1+','+data.field.specific_size2+','+data.field.specific_size3
+                break;
+            case '2':
+                specificSize = data.field.specific_size4+','+data.field.specific_size5
+                break;
+            case '3':
+                specificSize = data.field.specific_size6
+                break;
+            case '4':
+                specificSize = data.field.specific_size7
+                break;
+        }//具体尺寸
+
+
+        // var addTime = new Date(data.field.estimated_finish_time).toLocaleDateString().replace('/','-').replace('/','-')
+        // console.log(addTime)
+        var ajax = new $ax(Feng.ctxPath + "/application/updateOne?roadHazardId="+
+            parseInt($("#roadHazardId").val())
+            // +"&userId="+parseInt($("#userId").val())
+            +"&construct_type="+data.field.construct_type+
+            "&construct_project="+data.field.construct_project+
+            "&construct_project_detail="+data.field.construct_project_detail+
+            "&hazard_unit="+data.field.hazard_unit+
+            "&specificSize='"+specificSize+
+            "'&work_amount="+data.field.work_amount+
+            "&unit_price="+data.field.unit_price+
+            "&unit_price_type="+data.field.unit_price_type+
+            "&work_frequency='"+data.field.work_frequency+
+            "'&appraisal_cost="+data.field.appraisal_cost+
+            "&date='"+data.field.date+
+            "'&estimated_finish_time="+data.field.estimated_finish_time+
+            "&dateTime="+dateTime1, function (data) {
+            admin.closeThisDialog();
+
+            Feng.success("修改成功！");
+        }, function (data) {
+            Feng.error("修改失败！" + data.responseJSON.message)
+        });
+        ajax.start();
+        console.log("zzccccccccccccccccccccccccccccccccccccccc")
     })
     //保存
     form.on('submit(demo1)', function (data) {
         //layer.msg(JSON.stringify(data.field));
 
-        console.log(JSON.stringify(data.field))
-        console.log(data.field.road_hazard_status)
+    //    console.log(JSON.stringify(data.field))
+   //     console.log(data.field.road_hazard_status)
         //var articleFrom = data.field.articleFrom;
         var specificSize = 0;
         switch(data.field.hazard_unit){
@@ -1083,10 +1082,10 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             "date":data.field.date,
             "estimated_finish_time":data.field.estimated_finish_time,
         }
-        console.log(data.field.date)
-        console.log(addOne.date)
+     //   console.log(data.field.date)
+      //  console.log(addOne)
         var addTime = new Date(data.field.estimated_finish_time).toLocaleDateString().replace('/','-').replace('/','-')
-        console.log(addTime)
+     //   console.log(addTime)
         var ajax = new $ax(Feng.ctxPath + "/application/add?roadHazardId="+parseInt($("#roadHazardId").val())+"&userId="+parseInt($("#userId").val())+"&construct_type="+data.field.construct_type+
             "&construct_project="+data.field.construct_project+
             "&construct_project_detail="+data.field.construct_project_detail+

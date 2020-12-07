@@ -13,6 +13,9 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
     var applicationId=$('#application').val();
 
 
+
+
+
     var appraisal = {
         tableId: "appraisalList",
         // condition: {
@@ -181,13 +184,41 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
         }
     })
 
-    
+
+
+
 
     $('#updatemsg').click(function () {
+        $.ajax({
+            type: "post",
+            url: Feng.ctxPath + '/application/aGetR?updateId='+applicationId,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                console.log(data)
+                console.log(data[0])
+                console.log(data[0].road_hazard)
+                var road_hazard_id=data[0].road_hazard;
+                admin.putTempData('tableOK', false);
+                top.layui.admin.open({
+                    type: 2,
+                    title: '计划填报',
+                    area: ['850px', '800px'],
+                    content: Feng.ctxPath+'/application/findByRoadHazardIdUpdate/'+road_hazard_id,
+                    end: function () {
+                        admin.getTempData('tableOK') ;
+                       window.location.reload();
+                    }
+                });
+            }
+        })
+
+
 
     })
 
-    }
+
+
     $('#commit').click(function () {
         var comment=$('#feedback').val();
         console.log(comment);

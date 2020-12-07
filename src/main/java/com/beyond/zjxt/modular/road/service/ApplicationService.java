@@ -24,6 +24,8 @@ import java.util.Date;
 public interface ApplicationService extends IService<Application> {
     Object selectOne(int applicationId);
 
+    Application selectbyRId(int id);
+
     Integer getStatus(Integer applicationId);
 
     int changeStatus(int status,int applicationId);

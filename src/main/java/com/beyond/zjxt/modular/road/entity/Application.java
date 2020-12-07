@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
  * @author beyond
  * @since 2019-11-24
  */
+
 public class Application implements Serializable {
 
     private static final long serialVersionUID=1L;
@@ -24,6 +25,14 @@ public class Application implements Serializable {
      */
     @TableId(value = "application_id", type = IdType.AUTO)
     private Integer application_id;
+
+    public int getRoad_hazard() {
+        return road_hazard;
+    }
+
+    public void setRoad_hazard(int road_hazard) {
+        this.road_hazard = road_hazard;
+    }
 
     /**
      * 病害状况

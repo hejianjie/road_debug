@@ -6,6 +6,11 @@
         from application
         where application_id=#{applicationId}
     </select>
+    <select id="selectbyRId" resultType="com.beyond.zjxt.modular.road.entity.Application">
+        select *
+        from application
+        where road_hazard=#{roadHazardId}
+    </select>
     <select id="selectByApplicationId" resultType="map">
           select *
         from application

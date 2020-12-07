@@ -3,13 +3,14 @@ package com.beyond.zjxt.modular.road.controller;
 
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beyond.zjxt.core.common.exception.BizExceptionEnum;
 import com.beyond.zjxt.core.common.page.LayuiPageFactory;
 import com.beyond.zjxt.core.shiro.ShiroKit;
-import com.beyond.zjxt.modular.road.entity.CityAudit;
+import com.beyond.zjxt.modular.road.entity.*;
 import com.beyond.zjxt.core.shiro.ShiroUser;
-import com.beyond.zjxt.modular.road.entity.Sys_user;
 import com.beyond.zjxt.modular.road.service.*;
 import com.beyond.zjxt.modular.road.warpper.ApplicationWrapper;
 import io.swagger.annotations.ApiOperation;
@@ -576,9 +577,67 @@ public class ApplicationController extends BaseController {
 //        }
         Long date1 = Long.parseLong(dateTime);
         Date Time = new Date(date1);
+
         return applicationService.addOne(roadHazardId, userId, construct_type, construct_project, construct_project_detail, hazard_unit, specificSize, work_amount, unit_price, unit_price_type, work_frequency, appraisal_cost, date, estimated_finish_time,Time);
     }
 
+    @CrossOrigin
+    @PostMapping("/updateOne")
+    @ResponseBody
+    public Object updateOne(@RequestParam("roadHazardId")int roadHazardId,  @RequestParam("construct_type")int construct_type,
+                      @RequestParam("construct_project")int construct_project, @RequestParam("construct_project_detail")int construct_project_detail,
+                      @RequestParam("hazard_unit")int hazard_unit, @RequestParam("specificSize")String specificSize, @RequestParam("work_amount")float work_amount,
+                      @RequestParam("unit_price")float unit_price, @RequestParam("unit_price_type")int unit_price_type, @RequestParam("work_frequency")String work_frequency,
+                      @RequestParam("appraisal_cost")float appraisal_cost, @RequestParam("date")String date, @RequestParam("estimated_finish_time")int estimated_finish_time,
+                      @RequestParam("dateTime")String dateTime){
+
+        specificSize = specificSize.replaceAll("& #39;","");
+        work_frequency = work_frequency.replaceAll("& #39;","");
+        date = date.replaceAll("& #39;","");
+
+
+        Long date1 = Long.parseLong(dateTime);
+        Date Time = new Date(date1);
+
+
+
+
+        UpdateWrapper<Application> uw=new UpdateWrapper<>();
+        uw.eq("road_hazard",roadHazardId);
+        uw.set("type_selection",construct_type);
+        uw.set("project_name",construct_project);
+        uw.set("detail_name",construct_project_detail);
+        uw.set("organization_id",hazard_unit);
+        uw.set("work_amount",work_amount);
+        uw.set("specific_size",specificSize);
+        uw.set("unit_price",unit_price);
+        uw.set("unit_price_type",unit_price_type);
+        uw.set("work_frequency",work_frequency);
+        uw.set("appraisal_cost",appraisal_cost);
+        uw.set(" estimated_finish_time", date);
+        uw.set("estimated_finish_duration",estimated_finish_time);
+
+        applicationService.update(uw);
+
+        return ResponseData.success();
+    }
+
+    @CrossOrigin
+    @PostMapping("/updateOneR")
+    @ResponseBody
+    public Object updateOneR(@RequestParam("roadHazardId")int roadHazardId){
+
+        QueryWrapper<Application> qw=new QueryWrapper<>();
+        qw.eq("road_hazard",roadHazardId);
+        applicationService.getBaseMapper().delete(qw);
+
+        UpdateWrapper<Road_hazard> uw=new UpdateWrapper<>();
+        uw.eq("road_hazard_id",roadHazardId);
+        uw.set("status",1);
+        road_hazardService.update(uw);
+
+        return ResponseData.success();
+    }
 
     /**
      * zjk
@@ -688,6 +747,47 @@ public class ApplicationController extends BaseController {
         }
 
         return PREFIX + "countyFill.html";
+    }
+
+    /***
+     * 一个病害区县填报页面弹框
+     * List<Map<String,Object>>list = roadHazardImgService.selectByRoadHazardId(roadHazardId);
+     */
+    @RequestMapping("/findByRoadHazardIdUpdate/{roadHazardId}")
+    public String FindByRoadHarzardIdUpdate(@PathVariable int roadHazardId, Model model) {
+        Map roadHazard = this.road_hazardService.selectRoadHazardByroadHazardId(roadHazardId);
+        model.addAttribute("roadHazard", roadHazard);
+        String spSize= roadHazard.get("specific_size").toString();
+        spSize=spSize.replace(',','*');
+        model.addAttribute("specific_size",spSize);
+
+        String detect_time= roadHazard.get("detect_time").toString();
+        detect_time= (String) detect_time.subSequence(0,19);
+        model.addAttribute("detect_time",detect_time);
+
+        List<Map<String, Object>> imgList = roadHazardImgService.selectByRoadHazardId(roadHazardId);
+        model.addAttribute("hazardImgs", imgList);
+        ShiroUser user = ShiroKit.getUser();
+        model.addAttribute("user",user);
+
+        Map applyDate =  this.applicationService.getApplyDate(roadHazardId);
+        if(applyDate!=null){
+            model.addAttribute("applyDate",applyDate);
+        }else {
+            model.addAttribute("applyDate","未填报");
+        }
+
+        return PREFIX + "updateapplicationfillmsg.html";
+    }
+
+    /***
+     * 通过Aid获取Rid
+     */
+    @RequestMapping("/aGetR")
+    @ResponseBody
+    public Object aGetR(Integer updateId) {
+        Integer a = updateId;
+        return this.applicationService.selectOne(a);
     }
 
     /**

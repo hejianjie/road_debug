@@ -21,6 +21,7 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
     console.log(auditor_id);
     console.log(applicationId);
 
+    var road_hazard_id=-1;
 
     $.ajax({
         type: "get",
@@ -56,6 +57,7 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
                 }
             })
 
+            road_hazard_id=data[0].road_hazard;
             var sizeArr=data[0].specific_size.split(",");//具体尺寸String转化成数组
             form.val("applicationForm",{
                 "work_amount":data[0].work_amount,//工程量
@@ -414,27 +416,39 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
         admin.closeThisDialog();
     })
     $("#demo3").on("click",function () {
-        var ajax = new $ax(Feng.ctxPath + "/application/countyAuditor?id="+auditor_id+"&result='否决'&applicationId="+applicationId+"&role='"+role+"'", function (data) {
+        var ajax = new $ax(Feng.ctxPath
+            + "/application/countyAuditor?id="
+            +auditor_id+"&result='否决'&applicationId="
+            +applicationId+"&role='"+role+"'", function (data) {
             Feng.success("操作成功！");
+            admin.closeThisDialog();
         }, function (data) {
             Feng.error("操作失败！" + data.responseJSON.message)
+            admin.closeThisDialog();
         });
 
+        var ajaxre = new $ax(Feng.ctxPath + "/application/updateOneR?roadHazardId="+ parseInt(road_hazard_id)
+          , function (data) {
+            Feng.success("修改成功！");
+                admin.closeThisDialog();
+        }, function (data) {
+            Feng.error("修改失败！" + data.responseJSON.message)
+                admin.closeThisDialog();
+        });
 
         layer.confirm('请选择处理方式', {
             btn: ['重新填报 ','直接否决'] //按钮
         }, function(){
             //重新填报
-            layer.msg('重新填报', {icon: 1});
-            //ajax.start();
+           // layer.msg('重新填报', {icon: 1});
+            ajaxre.start();
             form.render();
-            admin.closeThisDialog();
 
         }, function(){
-            直接否决
-             ajax.start();
+            // 直接否决
+            ajax.start();
             form.render();
-            admin.closeThisDialog();
+
 
         });
 

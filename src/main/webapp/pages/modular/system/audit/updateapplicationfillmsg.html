@@ -1,0 +1,359 @@
+@layout("/common/_container.html",{js:["/assets/modular/system/audit/updateapplicationfillmsg.js"]}){
+<head>
+    <link rel="stylesheet" href="${ctxPath}/assets/common/css/number.css"/>
+</head>
+<div class="layui-body-header">
+    <span class="layui-body-header-title">巡查详细信息</span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div>
+                        <div>
+                            <div class="layui-card">
+
+                                <input type="text" id="roadHazardId" hidden="true" value="${roadHazard.road_hazard_id}">
+                                <input type="text" id="patrolResultId" hidden="true" value="${roadHazard.patrol_result_id}">
+                                <form class="layui-form layui-form-pane" action="" lay-filter="Form" style="margin-top:20px;display: none">
+                                    <div class="layui-form-item" >
+                                        <label class="layui-form-label" >路线</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="road"   type="text" class="layui-input" readonly>
+                                        </div>
+                                        <label class="layui-form-label" >路段</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="road_section"  type="text" class="layui-input" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item" >
+                                        <label class="layui-form-label" >位置</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${roadHazard.position}"  type="text" class="layui-input" readonly>
+                                        </div>
+                                        <label class="layui-form-label" >提交时间</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${detect_time}"  type="text" class="layui-input" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item" >
+                                        <label class="layui-form-label" >尺寸类型</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${roadHazard.sizeType}"  type="text" class="layui-input" readonly>
+                                        </div>
+                                        <label class="layui-form-label" >具体尺寸</label>
+                                        @if(roadHazard.sizeType=='面积'){
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${specific_size} 平方米"  type="text" class="layui-input" readonly>
+                                        </div>
+                                        @}
+                                        @if(roadHazard.sizeType=='体积'){
+                                        <div class="layui-input-inline">
+                                            <input name="construct_type" value="${specific_size} 立方米"  type="text" class="layui-input" readonly>
+                                        </div>
+                                        @}
+                                        @if(roadHazard.sizeType=='个数'){
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${specific_size} 个"  type="text" class="layui-input" readonly>
+                                        </div>
+                                        @}
+                                        @if(roadHazard.sizeType=='长度'){
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${specific_size} 米"  type="text" class="layui-input" readonly>
+                                        </div>
+                                        @}
+                                    </div>
+
+                                    <div class="layui-form-item" >
+                                        <label class="layui-form-label">安全隐患</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${roadHazard.potential_hazard}"  type="text" class="layui-input" readonly>
+                                        </div>
+                                        <label class="layui-form-label" >级别</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${roadHazard.issueLevel}"  type="text" class="layui-input" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item" >
+                                        <label class="layui-form-label" >病害情况</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${roadHazard.hazardInfor}"  type="text" class="layui-input" readonly>
+                                        </div>
+                                        <label class="layui-form-label" >描述</label>
+                                        <div class="layui-input-inline" >
+                                            <input name="construct_type" value="${roadHazard.description}"  type="text" class="layui-input" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-row layui-col-space5">
+                                        <div class="layui-col-md5">
+                                            <div class="layui-inline showImags" class="showImags" style="margin-top: 1%; float: left">
+                                                病害图片
+                                                @if(tool.isEmpty(hazardImgs)){
+                                                <span>暂无图片</span>
+                                                @}
+                                                @else{
+                                                @for(img in hazardImgs){
+                                                <img style="width: 50px;height: 50px;margin-left: 10px" src="${img.name}">
+                                                @}
+                                                @}
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md5"></div>
+                                        <div class="layui-col-md2"></div>
+                                    </div>
+                                </form>
+
+
+                                <!----区县填报申请--->
+                                <div  name="fillForm" id="fillForm">
+                                    <div class="layui-card-header" style="background-color: #3F4349;color: white">
+                                        区县部门计划填报
+                                    </div>
+                                    <div style="margin-top: 15px;width: 100%">
+                                        <form class="layui-form layui-form-pane" action="" lay-filter="applicationForm">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label" >建设性质</label>
+                                                <div class="layui-input-inline" >
+                                                    <select name="construct_type" id="construct_type" lay-verify="required">
+                                                    </select>
+                                                </div>
+                                                <label class="layui-form-label" >病害状况</label>
+                                                <div class="layui-input-inline" >
+                                                    <input type="text" name="road_hazard_status" lay-verify="required" autocomplete="off" placeholder="请输入病害状况" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label" >项目名称</label>
+                                                <div class="layui-input-inline" >
+                                                    <select name="construct_project" id="construct_project" lay-filter="project_filter" lay-verify="required">
+                                                    </select>
+                                                </div>
+                                                <label class="layui-form-label" >细目名称</label>
+                                                <div class="layui-input-inline" >
+                                                    <select name="construct_project_detail" id="construct_project_detail" lay-verify="required">
+                                                        <option value="">请先选择项目</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+
+                                                <label class="layui-form-label" >单位</label>
+                                                <div class="layui-input-inline" >
+                                                    <select name="hazard_unit" id="hazard_unit" lay-filter="unit_filter" lay-verify="required">
+                                                    </select>
+                                                </div>
+
+                                                <label class="layui-form-label" >具体尺寸</label>
+
+                                                <div class="layui-form-label" name="unit0" id="unit0">请先选择单位</div>
+
+                                                <div class="layui-form-inline" name="unit1" id="unit1" style="display:none">
+                                                    <div class="layui-input-inline" style="width: 7%">
+                                                        <input type="number" step="0.01" name="specific_size1" id="specific_size1" min="0" οnkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled" autocomplete="off" placeholder="长" class="layui-input">
+                                                    </div>
+                                                    <div class="layui-form-mid">*</div>
+                                                    <div class="layui-input-inline" style="width: 7%">
+                                                        <input type="number" step="0.01" name="specific_size2" id="specific_size2" autocomplete="off" placeholder="宽" class="layui-input">
+                                                    </div>
+                                                    <div class="layui-form-mid">*</div>
+                                                    <div class="layui-input-inline" style="width: 7%">
+                                                        <input type="number" step="0.01" name="specific_size3" id="specific_size3" autocomplete="off" placeholder="高" class="layui-input">
+                                                    </div>
+                                                </div>
+
+                                                <div class="layui-form-inline" name="unit2" id="unit2" style="display:none">
+                                                    <div class="layui-input-inline" style="width: 7%">
+                                                        <input type="number" step="0.01" name="specific_size4" id="specific_size4" autocomplete="off" placeholder="长" class="layui-input">
+                                                    </div>
+                                                    <div class="layui-form-mid">*</div>
+                                                    <div class="layui-input-inline" style="width: 7%">
+                                                        <input type="number" step="0.01" name="specific_size5" id="specific_size5" autocomplete="off" placeholder="宽" class="layui-input">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-input-inline" name="unit3" id="unit3" style="display:none" style="width: 14%">
+                                                    <div class="layui-input-inline" style="width: 80%;margin-left: 9px">
+                                                        <input type="number" step="0.01" name="specific_size6" id="specific_size6" autocomplete="off" class="layui-input">
+                                                    </div>
+                                                    <div class="layui-input-mid">米</div>
+                                                </div>
+
+                                                <div class="layui-input-inline" name="unit4" id="unit4" style="display:none" style="width: 14%">
+                                                    <div class="layui-input-inline" style="width: 80%;margin-left: 9px">
+                                                        <input type="number" name="specific_size7" id="specific_size7" autocomplete="off" class="layui-input">
+                                                    </div>
+                                                    <div class="layui-input-mid">个</div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label" >工程量</label>
+                                                <div class="layui-input-inline" >
+                                                    <input type="number" step="0.001" name="work_amount" id="work_amount" lay-verify="required" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">
+                                                </div>
+                                                <label class="layui-form-label" >作业频率</label>
+                                                <div class="layui-input-inline" >
+                                                    <input type="text" name="work_frequency" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label" >单价种类</label>
+                                                <div class="layui-input-inline" >
+                                                    <select name="unit_price_type" id="unit_price_type" lay-filter="unit_price_filter" lay-verify="required" >
+                                                    </select>
+                                                </div>
+
+                                                <label class="layui-form-label">单价</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="number" step="0.01" name="unit_price" id="unit_price" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+                                                </div>
+                                                <div class="layui-input-mid">元</div>
+                                            </div>
+
+
+                                            <div class="layui-form-item">
+
+                                                <label class="layui-form-label" >预估费用</label>
+                                                <div class="layui-input-inline" >
+                                                    <input type="text" name="appraisal_cost"  lay-verify="required" autocomplete="off" placeholder="" class="layui-input" readonly="readonly" >
+                                                </div>
+                                                <div class="layui-input-mid">元</div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">完成时限</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="number" name="estimated_finish_time" id="estimated_finish_time" lay-verify="required" autocomplete="off" placeholder="" class="layui-input">
+                                                </div>
+                                                <div class="layui-input-mid">天</div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">时限日期</label>
+                                                <div class="layui-input-inline" >
+                                                    <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input" readonly="readonly">
+                                                </div>
+
+                                            </div>
+                                            <div class="layui-form-item" align="right" >
+                                                <div class="layui-input-block">
+                                                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo2">修改</button>
+                                                </div>
+                                            </div>
+                                            <!--<div class="layui-form-item" id="apply" style="display:none">-->
+                                                <!--<label class="layui-form-label">填报人</label>-->
+
+                                                <!--<input type="text" id="userId" hidden="true" value="${user.id}">-->
+                                                <!--<div class="layui-input-inline" >-->
+                                                    <!--<input  type="text" name="county_applicant" value="${user.name}"  class="layui-input" readonly="readonly">-->
+                                                <!--</div>-->
+
+                                                <!--<label class="layui-form-label">填报时间</label>-->
+                                                <!--<div class="layui-input-inline" >-->
+                                                    <!--<input  type="text" name="county_applicant_date" class="layui-input" readonly="readonly">-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="layui-form-item" style="display:none">-->
+                                                <!--<div class="layui-form-inline" name="auditor_one" id="auditor_one" style="display:none">-->
+                                                    <!--<label class="layui-form-label" >区县审核人</label>-->
+                                                    <!--<div class="layui-input-inline" >-->
+                                                        <!--<input type="text" name="auditor_one" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                    <!--</div>-->
+
+                                                    <!--<label class="layui-form-label" >审核时间</label>-->
+                                                    <!--<div class="layui-input-inline" >-->
+                                                        <!--<input type="text" name="auditor_one_time" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="layui-form-item" style="display:none">-->
+                                                <!--<div class="layui-form-inline" name="auditor_two" id="auditor_two" style="display:none">-->
+                                                    <!--<label class="layui-form-label">区县审核人</label>-->
+                                                    <!--<div class="layui-input-inline"  >-->
+                                                        <!--<input type="text" name="auditor_two" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                    <!--</div>-->
+
+                                                    <!--<label class="layui-form-label" >审核时间</label>-->
+                                                    <!--<div class="layui-input-inline" >-->
+                                                        <!--<input type="text" name="auditor_two_time" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="layui-form-item" style="display:none">-->
+                                                <!--<div class="layui-form-inline" name="city_auditor_one" id="city_auditor_one" style="display:none">-->
+                                                    <!--<label class="layui-form-label" >市级审核人</label>-->
+                                                    <!--<div class="layui-input-inline" >-->
+                                                        <!--<input type="text" name="auditor_one_city" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                    <!--</div>-->
+
+                                                    <!--<label class="layui-form-label" >审核时间</label>-->
+                                                    <!--<div class="layui-input-inline" >-->
+                                                        <!--<input type="text" name="auditor_one_time_city" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                            <!--<div class="layui-form-item" name="fb_one" id="fb_one" style="display:none">-->
+                                                <!--<label class="layui-form-label" >审核意见</label>-->
+                                                <!--<div class="layui-input-inline" >-->
+                                                    <!--<input type="text" name="fb_1" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                <!--</div>-->
+
+
+                                            <!--</div>-->
+
+                                            <!--<div class="layui-form-item">-->
+                                                <!--<div class="layui-form-inline" name="city_auditor_two" id="city_auditor_two" style="display:none">-->
+                                                    <!--<label class="layui-form-label">市级审核人</label>-->
+                                                    <!--<div class="layui-input-inline"  >-->
+                                                        <!--<input type="text" name="auditor_two_city" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                    <!--</div>-->
+
+                                                    <!--<label class="layui-form-label" >审核时间</label>-->
+                                                    <!--<div class="layui-input-inline" >-->
+                                                        <!--<input type="text" name="auditor_two_time_city" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                            <!--<div class="layui-form-item"  name="fb_two" id="fb_two" style="display:none">-->
+                                                <!--<label class="layui-form-label" >审核意见</label>-->
+                                                <!--<div class="layui-input-inline" >-->
+                                                    <!--<input type="text" name="fb_2" lay-verify="title" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">-->
+                                                <!--</div>-->
+
+                                            <!--</div>-->
+                                            <!--<div class="layui-form-item" align="center" id="submitButton" style="display: none">-->
+                                                <!--<div class="layui-input-block">-->
+                                                    <!--<button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>-->
+                                                    <!--<button type="button" class="layui-btn layui-btn-primary" id="apk_reset_btn">重置</button>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div class="layui-form-item" align="center" id="editButton" style="display: none">-->
+                                                <!--<div class="layui-input-block">-->
+                                                    <!--<button type="submit" class="layui-btn" lay-submit="" lay-filter="demo2">修改</button>-->
+                                                    <!--<button type="button" class="layui-btn layui-btn-primary" id="reset_btn">重置</button>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        </form>
+                                    </div>
+                                    <!--区县填报结束-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+@}

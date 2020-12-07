@@ -1,6 +1,7 @@
 package com.beyond.zjxt.modular.road.service.impl;
 
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beyond.zjxt.core.common.exception.BizExceptionEnum;
 import com.beyond.zjxt.core.common.page.LayuiPageFactory;
@@ -34,8 +35,14 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
 
     @Override
     public Object selectOne(int applicationId) {
+        System.out.println("===============================");
         return this.baseMapper.selectOne(applicationId);
     }
+
+    @Override
+    public Application selectbyRId(int roadHazardId){
+        return this.baseMapper.selectbyRId(roadHazardId);
+    };
 
     @Override
     public Integer getStatus(Integer applicationId) {
