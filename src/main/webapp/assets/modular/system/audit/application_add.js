@@ -35,7 +35,6 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                 dataType: 'json',
                 contentType: "application/json;charset=utf-8",
                 success:function(hazardInfo){
-                    console.log(hazardInfo)
                     form.val("applicationForm",{
                         "road_hazard_status":hazardInfo[0].name,//病害情况
                         "work_frequency":1,
@@ -50,7 +49,6 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: function (data1) {
-                    console.log(data1)
                     $("#hazard_unit").empty();
                     if(data1.length!=0){
                         // $('#hazard_unit').append(new Option('请选择单位', ''));
@@ -202,7 +200,6 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (data1) {
-            console.log(data1)
             $("#construct_project").empty();
             if(data1.length!=0){
                 $('#construct_project').append(new Option('请选择项目', ''));
@@ -231,7 +228,6 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                         $("#construct_project_detail").empty();
                         $('#construct_project_detail').append(new Option('请选择细目', ''));
                         $.each(data1, function(index, item) {
-                            console.log(item.construct_project_detail_id)
                             option = new Option(item.construct_project_detail_name, item.construct_project_detail_id);
                             $('#construct_project_detail').append(option);
                         });
@@ -504,8 +500,6 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
     form.on('submit(demo1)', function (data) {
         //layer.msg(JSON.stringify(data.field));
 
-        console.log(JSON.stringify(data.field))
-        console.log(data.field.road_hazard_status)
         //var articleFrom = data.field.articleFrom;
         var specificSize = 0;
         switch(data.field.hazard_unit){
@@ -538,10 +532,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
             "date":data.field.date,
             "estimated_finish_time":data.field.estimated_finish_time,
         }
-        console.log(data.field.date)
-        console.log(addOne.date)
         var addTime = new Date(data.field.estimated_finish_time).toLocaleDateString().replace('/','-').replace('/','-')
-        console.log(addTime)
         var ajax = new $ax(Feng.ctxPath + "/application/add?roadHazardId="+roadHazardId+"&userId="+userId+"&construct_type="+data.field.construct_type+
             "&construct_project="+data.field.construct_project+
             "&construct_project_detail="+data.field.construct_project_detail+

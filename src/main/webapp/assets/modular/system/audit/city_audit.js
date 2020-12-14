@@ -91,7 +91,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            console.log(data)
             const arr = [];
             $.each(data, function (index, item) {
                 // arr.append(new Option(item.full_name, item.dept_id));
@@ -100,7 +99,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
                 dwoption.value=item.user_id
                 arr.push(dwoption)
             });
-            console.log(arr)
             //渲染多选
             var demo1 = xmSelect.render({
                 el: '#forward_to',
@@ -114,7 +112,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
                     forward_to='';
                     const checkedOptions = data.arr;
                     third_party.splice(0,third_party.length);
-                    console.log(checkedOptions)
                     for(var i=0;i<checkedOptions.length;i++){
                         third_party.push(checkedOptions[i].value);
                         forward_to+=checkedOptions[i].value
@@ -134,7 +131,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
         data:{applicationId:applicationId},
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            console.log(data)
             if(data.length ===0){
                 $("#appraisalList").hide();
             }else{
@@ -161,7 +157,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
 
     var auditSuggestion="";
     form.on('select(auditSuggestion)',function (data) {
-        console.log(data.value);
         if (data.value!=""){
             $("#commit").removeClass("layui-btn-disabled")
         }
@@ -195,9 +190,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             success: function (data) {
-                console.log(data)
-                console.log(data[0])
-                console.log(data[0].road_hazard)
                 var road_hazard_id=data[0].road_hazard;
                 admin.putTempData('tableOK', false);
                 top.layui.admin.open({
@@ -221,8 +213,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
 
     $('#commit').click(function () {
         var comment=$('#feedback').val();
-        console.log(comment);
-        console.log("7777777", $("#status").val());
         if (auditSuggestion==""){
             layer.open({
                 title:"提示",
@@ -239,7 +229,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
                 } else {
                     var ajax = new $ax(Feng.ctxPath + "/application/updateCityAuditResult?auditSuggestion=" + auditSuggestion + "&feedback=" + comment + "&applicationId=" + applicationId+"&reff=0", function () {
                         Feng.success("审核成功");
-                        console.log("888888888", $("#status").val());
                         setTimeout(function () {
                             if ($("#status").val() == 5) {
                                 window.location.href = Feng.ctxPath + "/application/cityExecutiveUnderAuditPage"
@@ -258,7 +247,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
                 }
             }
             if (auditSuggestion == "同意") {
-                console.log(comment)
                 var ajax = new $ax(Feng.ctxPath + "/application/updateCityAuditResult?auditSuggestion=" + auditSuggestion + "&feedback=" + comment + "&applicationId=" + applicationId+"&reff=0", function () {
                     Feng.success("审核成功");
                     setTimeout(function () {
@@ -302,7 +290,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
     //     ]]
     // }
     appraisal.showInfo = function (data) {
-        console.log(data.id)
         admin.putTempData('formOk', false);
         top.layui.admin.open({
             type: 2,
@@ -322,7 +309,6 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
         if (layEvent === 'edit') {
             appraisal.onEditNotice(data);
         } else if (layEvent === 'delete') {
-            console.log(obj);
             appraisal.onDeleteNotice(data);
         }else if (layEvent === 'showInfo') {
             appraisal.showInfo(data);

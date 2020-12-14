@@ -40,6 +40,9 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer'], function (
                     console.log("哈哈哈哈哈")
                     var ajax = new $ax(Feng.ctxPath + "/application/updateSupremoStatus?status=" + auditSuggestion + "&applicationId=" + applicationId, function () {
                         Feng.success("审核成功");
+                        setTimeout(function () {
+                            window.location.href = Feng.ctxPath + "/application/supremoUnderAuditPage"
+                        },1500)
                     }, function () {
                         Feng.error("审核失败！" + data.responseJSON.message)
                     });
@@ -51,6 +54,9 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer'], function (
                 console.log(comment)
                 var ajax = new $ax(Feng.ctxPath + "/application/updateSupremoStatus?status=" + auditSuggestion + "&applicationId=" + applicationId, function () {
                     Feng.success("审核成功");
+                    setTimeout(function () {
+                        window.location.href = Feng.ctxPath + "/application/supremoUnderAuditPage"
+                    },1500)
                 }, function () {
                     Feng.error("审核失败！" + data.responseJSON.message)
                 });
