@@ -222,6 +222,7 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
     $('#commit').click(function () {
         var comment=$('#feedback').val();
         console.log(comment);
+        console.log("7777777", $("#status").val());
         if (auditSuggestion==""){
             layer.open({
                 title:"提示",
@@ -238,6 +239,15 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
                 } else {
                     var ajax = new $ax(Feng.ctxPath + "/application/updateCityAuditResult?auditSuggestion=" + auditSuggestion + "&feedback=" + comment + "&applicationId=" + applicationId+"&reff=0", function () {
                         Feng.success("审核成功");
+                        console.log("888888888", $("#status").val());
+                        setTimeout(function () {
+                            if ($("#status").val() == 5) {
+                                window.location.href = Feng.ctxPath + "/application/cityExecutiveUnderAuditPage"
+                            } else if ($("#status").val() == 4) {
+                                window.location.href = Feng.ctxPath + "/application/cityDeptUnderAuditPage"
+                            }
+                        }, 1500);
+
 
                     }, function () {
                         Feng.error("审核失败！" + data.responseJSON.message)
@@ -251,6 +261,13 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form','layer','xmSelect'],
                 console.log(comment)
                 var ajax = new $ax(Feng.ctxPath + "/application/updateCityAuditResult?auditSuggestion=" + auditSuggestion + "&feedback=" + comment + "&applicationId=" + applicationId+"&reff=0", function () {
                     Feng.success("审核成功");
+                    setTimeout(function () {
+                        if ($("#status").val() == 5) {
+                            window.location.href = Feng.ctxPath + "/application/cityExecutiveUnderAuditPage"
+                        } else if ($("#status").val() == 4) {
+                            window.location.href = Feng.ctxPath + "/application/cityDeptUnderAuditPage"
+                        }
+                    }, 1500);
 
                 }, function () {
                     Feng.error("审核失败！" + data.responseJSON.message)

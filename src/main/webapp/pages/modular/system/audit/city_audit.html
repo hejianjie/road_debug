@@ -192,6 +192,7 @@
                                             <label class="layui-form-label"style="width: 10%">审核时间</label>
                                             <div class="layui-input-inline" style="width: 14%">
                                                 <input type="text" value="${application.auditor_two_time}" readonly name="auditor_two" lay-verify="title" autocomplete="off" placeholder="" class="layui-input">
+                                                <input type="hidden" value="${status}" id="status">
                                             </div>
                                         </div>
                                         @if(status==4){
