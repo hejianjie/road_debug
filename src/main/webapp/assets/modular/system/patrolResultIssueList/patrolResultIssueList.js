@@ -70,7 +70,7 @@ layui.use(['table', 'admin', 'ax', 'ztree','layer'], function () {
         admin.putTempData('formOk', false);
         top.layui.admin.open({
             type: 2,
-            title: '审核进程',
+            title: '审核进度',
             area: ['800px', '600px'],
             content: Feng.ctxPath+'/flow?roadHazardId='+hid,
             end: function () {

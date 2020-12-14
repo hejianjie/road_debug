@@ -49,6 +49,7 @@
         <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
             and (create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
         </if>
+        order by create_time DESC
     </select>
 
     <update id="setStatus">
