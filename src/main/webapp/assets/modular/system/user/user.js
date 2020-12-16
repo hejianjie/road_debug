@@ -220,6 +220,10 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         MgrUser.exportExcel();
     });
 
+    $("#export").click(function () {
+        window.location.href = Feng.ctxPath + "/export/exportSummaryOfMinorRepair"
+    })
+
     // 工具条点击事件
     table.on('tool(' + MgrUser.tableId + ')', function (obj) {
         var data = obj.data;
