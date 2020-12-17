@@ -399,4 +399,8 @@ from application left join construct_type on construct_type.construct_type_id =a
 								 left join sys_user as g on g.user_id = application.city_executive
 where application.application_id =#{applicationId}
     </select>
+    <select id="getSummaryOfRepair" resultType="java.util.Map">
+          select  (@i:=@i+1)  i,v_summary_of_minor_repair.* from  v_summary_of_minor_repair ,(select   @i:=0) as   it
+          WHERE DATE_FORMAT(v_summary_of_minor_repair.finshTime,'%Y-%m') = DATE_FORMAT(#{yearMonth},'%Y-%m')
+    </select>
 </mapper>

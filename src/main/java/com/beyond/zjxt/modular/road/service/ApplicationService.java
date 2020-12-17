@@ -76,4 +76,6 @@ public interface ApplicationService extends IService<Application> {
     Map<String,Object> getApplyDate(Integer roadHazardId);
 
     List<Map<String,Object>> getView(int applicationId);
+
+    List<Map<String, Object>> getSummaryOfRepair(Date yearMonth);
 }

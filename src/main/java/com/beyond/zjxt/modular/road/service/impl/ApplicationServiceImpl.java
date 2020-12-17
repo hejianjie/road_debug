@@ -185,4 +185,9 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
     public List<Map<String,Object>> getView(int applicationId) {
         return this.baseMapper.getView(applicationId);
     }
+
+    @Override
+    public List<Map<String, Object>> getSummaryOfRepair(Date yearMonth) {
+        return this.baseMapper.getSummaryOfRepair(yearMonth);
+    }
 }

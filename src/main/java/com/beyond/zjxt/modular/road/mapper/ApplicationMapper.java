@@ -77,4 +77,5 @@ public interface ApplicationMapper extends BaseMapper<Application> {
 
     List<Map<String,Object>> getView(@Param("applicationId") int applicationId);
 
+    List<Map<String, Object>> getSummaryOfRepair(@Param("yearMonth") Date yearMonth);
 }

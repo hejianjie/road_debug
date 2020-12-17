@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+
 /**
  * @Author :zjk
  * @Date :Create in 15:57 2020-12-16
@@ -25,7 +27,7 @@ public class SummaryOfMinorRepairsHead {
     private String projectName;
 
     @ExcelProperty(value = {"细目名称"}, index = 2)
-    private String smallProjectName;
+    private String detailProjectName;
 
     @ExcelProperty(value = {"建设性质"}, index = 3)
     private String projectType;
@@ -34,25 +36,25 @@ public class SummaryOfMinorRepairsHead {
     private String unit;
 
     @ExcelProperty(value = {"单价（元）"}, index = 5)
-    private String unitPrice;
+    private BigDecimal unitPrice;
 
     @ExcelProperty(value = {"计划","作业工作量"}, index = 6)
-    private String workAmount;
+    private BigDecimal workAmount;
 
     @ExcelProperty(value = {"计划","作业频率"}, index = 7)
     private String operationFrequency;
 
     @ExcelProperty(value = {"计划","金额（万元）"}, index = 8)
-    private String price;
+    private BigDecimal price;
 
     @ExcelProperty(value = {"完成","作业工程量"}, index = 9)
-    private String finWorkAmount;
+    private BigDecimal finWorkAmount;
 
     @ExcelProperty(value = {"完成","作业频率"}, index = 10)
     private String finOperationFrequency;
 
     @ExcelProperty(value = {"完成","金额(万元)"}, index = 11)
-    private String finPrice;
+    private BigDecimal finPrice;
 
     @ExcelProperty(value = {"备注"}, index = 12)
     private String note;

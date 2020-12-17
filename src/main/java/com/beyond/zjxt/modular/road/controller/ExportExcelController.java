@@ -1,24 +1,33 @@
 package com.beyond.zjxt.modular.road.controller;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.beyond.zjxt.config.web.MonthSheetWriteHandler;
+import com.beyond.zjxt.core.shiro.ShiroKit;
 import com.beyond.zjxt.modular.road.entity.SummaryOfMinorRepairsHead;
+import com.beyond.zjxt.modular.road.service.ApplicationService;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author :zjk
@@ -28,24 +37,33 @@ import java.util.List;
 @Controller
 @RequestMapping("/export")
 public class ExportExcelController {
+    @Autowired
+    ApplicationService applicationService;
     @RequestMapping("/exportSummaryOfMinorRepair")
-    public void exportSummaryOfMinorRepair(HttpServletResponse response) throws IOException {
+    public void exportSummaryOfMinorRepair(HttpServletResponse response, @RequestParam("yearMonth") Date yearMonth) throws IOException {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(yearMonth);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        ShiroKit.setSessionAttr("year", year);
+        ShiroKit.setSessionAttr("month", month);
+        List<Map<String,Object>> data = applicationService.getSummaryOfRepair(yearMonth);
         List<SummaryOfMinorRepairsHead> list = new ArrayList<>();
-        for (int i = 0; i <10 ; i++) {
+        for (int i = 0; i < data.size(); i++) {
             SummaryOfMinorRepairsHead summaryOfMinorRepairsHead = new SummaryOfMinorRepairsHead();
-            summaryOfMinorRepairsHead.setFinOperationFrequency("252");
-            summaryOfMinorRepairsHead.setFinPrice("151");
-            summaryOfMinorRepairsHead.setFinWorkAmount("151");
-            summaryOfMinorRepairsHead.setNote("101");
-            summaryOfMinorRepairsHead.setOrderNum((long)i);
-            summaryOfMinorRepairsHead.setPrice("1");
-            summaryOfMinorRepairsHead.setProjectName("155");
-            summaryOfMinorRepairsHead.setSmallProjectName("105");
-            summaryOfMinorRepairsHead.setUnit("45");
-            summaryOfMinorRepairsHead.setUnitPrice("101");
-            summaryOfMinorRepairsHead.setWorkAmount("101");
-            summaryOfMinorRepairsHead.setProjectType("54");
-            summaryOfMinorRepairsHead.setOperationFrequency("848");
+            summaryOfMinorRepairsHead.setFinOperationFrequency((String) data.get(i).get("finOperationFrequency"));
+            summaryOfMinorRepairsHead.setFinPrice((BigDecimal) data.get(i).get("finPrice"));
+            summaryOfMinorRepairsHead.setFinWorkAmount((BigDecimal) data.get(i).get("finWorkAmount"));
+            summaryOfMinorRepairsHead.setNote((String) data.get(i).get(""));
+            summaryOfMinorRepairsHead.setOrderNum((long) i + 1);
+            summaryOfMinorRepairsHead.setPrice((BigDecimal) data.get(i).get("price"));
+            summaryOfMinorRepairsHead.setProjectName((String) data.get(i).get("projectName"));
+            summaryOfMinorRepairsHead.setDetailProjectName((String) data.get(i).get("detailProjectName"));
+            summaryOfMinorRepairsHead.setUnit((String) data.get(i).get("unit"));
+            summaryOfMinorRepairsHead.setUnitPrice((BigDecimal) data.get(i).get("unitPrice"));
+            summaryOfMinorRepairsHead.setWorkAmount((BigDecimal) data.get(i).get("workAmount"));
+            summaryOfMinorRepairsHead.setProjectType((String) data.get(i).get("projectType"));
+            summaryOfMinorRepairsHead.setOperationFrequency((String) data.get(i).get("finOperationFrequency"));
             list.add(summaryOfMinorRepairsHead);
         }
         response.setContentType("application/vnd.ms-excel");
@@ -77,7 +95,7 @@ public class ExportExcelController {
                 .excelType(ExcelTypeEnum.XLS).head(SummaryOfMinorRepairsHead.class)
                 //设置拦截器或自定义样式
                 .registerWriteHandler(new MonthSheetWriteHandler())
-                .registerWriteHandler(new HorizontalCellStyleStrategy(headWriteCellStyle,contentWriteCellStyle))
+                .registerWriteHandler(new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle))
                 .sheet("存量建筑垃圾堆体治理进度月报表")
                 //设置默认样式及写入头信息开始的行数
                 .useDefaultStyle(true).relativeHeadRowIndex(3)
