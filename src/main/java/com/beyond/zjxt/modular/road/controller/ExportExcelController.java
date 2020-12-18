@@ -101,11 +101,13 @@ public class ExportExcelController {
                 head.setFinOperationFrequency("填报人:");
             } else {
                 summaryOfMinorRepairsHead.setFinOperationFrequency((String) data.get(i - 1).get("finOperationFrequency"));
-                summaryOfMinorRepairsHead.setFinPrice((BigDecimal) data.get(i - 1).get("finPrice"));
+                BigDecimal finPrice = (BigDecimal) data.get(i - 1).get("finPrice");
+                summaryOfMinorRepairsHead.setFinPrice(finPrice.divide(new BigDecimal(10000)));
                 summaryOfMinorRepairsHead.setFinWorkAmount((BigDecimal) data.get(i - 1).get("finWorkAmount"));
                 summaryOfMinorRepairsHead.setNote((String) data.get(i - 1).get(""));
                 summaryOfMinorRepairsHead.setOrderNum((long) i);
-                summaryOfMinorRepairsHead.setPrice((BigDecimal) data.get(i - 1).get("price"));
+                BigDecimal price = (BigDecimal) data.get(i - 1).get("price");
+                summaryOfMinorRepairsHead.setPrice(price.divide(new BigDecimal(10000)));
                 summaryOfMinorRepairsHead.setProjectName((String) data.get(i - 1).get("projectName"));
                 summaryOfMinorRepairsHead.setDetailProjectName((String) data.get(i - 1).get("detailProjectName"));
                 summaryOfMinorRepairsHead.setUnit((String) data.get(i - 1).get("unit"));
@@ -115,6 +117,7 @@ public class ExportExcelController {
                 summaryOfMinorRepairsHead.setOperationFrequency((String) data.get(i - 1).get("finOperationFrequency"));
                 String specificSize = (String) data.get(i - 1).get("specificSize");
                 String finSpecificSize = (String) data.get(i - 1).get("finSpecificSize");
+                BeanUtils.copyProperties(summaryOfMinorRepairsHead, head);
                 head.setRouteName((String) data.get(i - 1).get("routeName"));
                 head.setSmallProjectName((String) data.get(i - 1).get("detailProjectName"));
                 head.setBeginToEndStake((String) data.get(i - 1).get("beginToEndStake"));
@@ -131,7 +134,7 @@ public class ExportExcelController {
 //                    head.setAfterImg(afterImg);
 //                }
             }
-            BeanUtils.copyProperties(summaryOfMinorRepairsHead, head);
+
             list.add(summaryOfMinorRepairsHead);
             list1.add(head);
         }

@@ -48,11 +48,12 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax', 'selectM
     //渲染时间选择框
     laydate.render({
         elem: '#yearMonth',
+        type: 'month',
         max: Feng.currentDate()
     });
 
     $("#exportBtn").click(function () {
-        var time = $("#yearMonth").val();
+        var time = $("#yearMonth").val() + "-01";
         const nationHighway = resTag.values;
         if (time.length == 0) {
             layer.open({

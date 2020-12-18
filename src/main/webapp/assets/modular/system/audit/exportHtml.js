@@ -14,7 +14,8 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
                 "                            </div>",
             btn: ["确定", "取消"],
             yes: function (index, layero) {
-                var time = $("#yearMonth").val();
+                var time = $("#yearMonth").val() + "-01";
+
                 window.location.href = Feng.ctxPath + "/export/exportSummaryOfMinorRepair?yearMonth=" + time;
                 layer.close(index);
             },
@@ -25,6 +26,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         //渲染时间选择框
         laydate.render({
             elem: '#yearMonth',
+            type: 'month',
             max: Feng.currentDate()
         });
 });
