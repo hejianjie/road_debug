@@ -401,6 +401,21 @@ where application.application_id =#{applicationId}
     </select>
     <select id="getSummaryOfRepair" resultType="java.util.Map">
           select  (@i:=@i+1)  i,v_summary_of_minor_repair.* from  v_summary_of_minor_repair ,(select   @i:=0) as   it
-          WHERE DATE_FORMAT(v_summary_of_minor_repair.finshTime,'%Y-%m') = DATE_FORMAT(#{yearMonth},'%Y-%m')
+          WHERE DATE_FORMAT(v_summary_of_minor_repair.finshTime,'%Y-%m') = DATE_FORMAT(#{yearMonth},'%Y-%m') and
+          deptId = #{deptId}
+    </select>
+    <select id="getDetailOfRepair" resultType="java.util.Map">
+        select v_summary_of_minor_repair.* from  v_summary_of_minor_repair
+    </select>
+    <select id="cityExport" resultType="java.util.Map">
+        select v_summary_of_minor_repair.* from  v_summary_of_minor_repair
+        where DATE_FORMAT(v_summary_of_minor_repair.finshTime,'%Y-%m') = DATE_FORMAT(#{yearMonth},'%Y-%m')
+        <if test="nationHighway != null or nationHighway!=''">
+        and nationHighwayId in
+            <foreach collection="nationHighway" open="("  close=")" separator="," item="wayId">
+                #{wayId}
+            </foreach>
+        </if>
+        ORDER BY routeName
     </select>
 </mapper>

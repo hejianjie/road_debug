@@ -101,6 +101,8 @@ layui.config({
     ztree: '../../expand/module/ztree/ztree-object',
     ajaxCascader: 'ajaxCascader/ajaxCascader',
     cascader:'cascader/cascader',
+    selectN: 'layui-extends/selectN',
+    selectM: 'layui-extends/selectM',
 }).use(['admin'], function () {
     var $ = layui.jquery;
     var admin = layui.admin;

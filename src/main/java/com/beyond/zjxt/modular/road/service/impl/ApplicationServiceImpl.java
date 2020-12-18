@@ -1,7 +1,6 @@
 package com.beyond.zjxt.modular.road.service.impl;
 
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beyond.zjxt.core.common.exception.BizExceptionEnum;
 import com.beyond.zjxt.core.common.page.LayuiPageFactory;
@@ -187,7 +186,18 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
     }
 
     @Override
-    public List<Map<String, Object>> getSummaryOfRepair(Date yearMonth) {
-        return this.baseMapper.getSummaryOfRepair(yearMonth);
+    public List<Map<String, Object>> getSummaryOfRepair(Date yearMonth, Long deptId) {
+        return this.baseMapper.getSummaryOfRepair(yearMonth, deptId);
+    }
+
+    @Override
+    public List<Map<String, Object>> getDetailOfRepair(Date yearMonth) {
+
+        return this.baseMapper.getDetailOfRepair(yearMonth);
+    }
+
+    @Override
+    public List<Map<String, Object>> cityExport(Date yearMonth, int[] nationHighway) {
+        return this.baseMapper.cityExport(yearMonth, nationHighway);
     }
 }

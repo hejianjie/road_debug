@@ -7,6 +7,9 @@ import com.beyond.zjxt.core.shiro.ShiroKit;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @Author :zjk
  * @Date :Create in 19:28 2020-12-16
@@ -20,6 +23,9 @@ public class MonthSheetWriteHandler implements SheetWriteHandler {
 
     @Override
     public void afterSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formatDate = simpleDateFormat.format(date);
         int month = ShiroKit.getSessionAttr("month");
         int year = ShiroKit.getSessionAttr("year");
         String dept = ShiroKit.getUser().getDeptName();
@@ -52,7 +58,8 @@ public class MonthSheetWriteHandler implements SheetWriteHandler {
             Cell row2Cell1 = row2.createCell(0);
             row2Cell1.setCellValue("填报单位（盖章）：" + dept);
             Cell row2Cell2 = row2.createCell(9);
-            row2Cell2.setCellValue("填报日期：2019年5月7日");
+
+            row2Cell2.setCellValue("填报日期：" + formatDate);
             row2Cell1.setCellStyle(cellStyle1);
             row2Cell2.setCellStyle(cellStyle1);
         }
@@ -71,7 +78,7 @@ public class MonthSheetWriteHandler implements SheetWriteHandler {
             Cell sheet1Row1Cell = sheet1Row1.createCell(0);
             sheet1Row1Cell.setCellValue("填报单位（盖章）：" + dept);
             Cell sheet1Row1Cell1 = sheet1Row1.createCell(15);
-            sheet1Row1Cell1.setCellValue("填报日期：2019年5月7日");
+            sheet1Row1Cell1.setCellValue("填报日期：" + formatDate);
             sheet1Row1Cell.setCellStyle(cellStyle1);
             sheet1Row1Cell1.setCellStyle(cellStyle1);
         }

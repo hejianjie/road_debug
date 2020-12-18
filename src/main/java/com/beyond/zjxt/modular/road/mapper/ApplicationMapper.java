@@ -1,6 +1,5 @@
 package com.beyond.zjxt.modular.road.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beyond.zjxt.modular.road.entity.Application;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -77,5 +76,9 @@ public interface ApplicationMapper extends BaseMapper<Application> {
 
     List<Map<String,Object>> getView(@Param("applicationId") int applicationId);
 
-    List<Map<String, Object>> getSummaryOfRepair(@Param("yearMonth") Date yearMonth);
+    List<Map<String, Object>> getSummaryOfRepair(@Param("yearMonth") Date yearMonth,@Param("deptId") Long deptId);
+
+    List<Map<String, Object>> getDetailOfRepair(@Param("yearMonth") Date yearMonth);
+
+    List<Map<String, Object>> cityExport(@Param("yearMonth") Date yearMonth, @Param("nationHighway") int[] nationHighway);
 }
