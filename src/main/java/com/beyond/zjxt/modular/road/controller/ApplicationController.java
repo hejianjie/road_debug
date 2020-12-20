@@ -16,6 +16,7 @@ import com.beyond.zjxt.modular.road.warpper.ApplicationWrapper;
 import io.swagger.annotations.ApiOperation;
 import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -849,6 +850,13 @@ public class ApplicationController extends BaseController {
         model.addAttribute("detail",detail);
 
         return "/modular/system/audit/city_audit_detail.html";
+    }
+
+    //更新申请表状态
+    @RequestMapping("/updateStatus")
+    @ResponseBody
+    public void updateStatus(@RequestParam("applicationId") int applicationId, @RequestParam("check") String check) {
+        applicationService.updateStatus(applicationId, check);
     }
 }
 

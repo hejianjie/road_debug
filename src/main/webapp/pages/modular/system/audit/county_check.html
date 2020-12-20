@@ -418,7 +418,18 @@
                                             <input type="text" name="audit_date2" autocomplete="off" placeholder="" class="layui-input" readonly="readonly">
                                         </div>
                                     </div>
+                                    @if (checkA == 1){
+                                    <div id="acceptanceAudit" style="margin-left: 20%" class="layui-form-item" >
+                                        @if(status == 13){
+                                            <span>已审核</span>
+                                        @}
+                                        @else if(status == 12){
+                                        <button class="layui-btn" id="passBtn">通过</button>
+                                        <button class="layui-btn layui-btn-danger" id="denyBtn">不通过</button>
+                                        @}
 
+                                    </div>
+                                    @}
                                     <div class="layui-card-header" style="background-color: #3F4349;color: white;margin-top:20px" id="hide11">
                                         第三方核量信息
                                     </div>

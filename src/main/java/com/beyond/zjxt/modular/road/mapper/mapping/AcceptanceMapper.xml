@@ -74,7 +74,7 @@ order by ISNULL(hlStatus), hlStatus asc
         from inspection_company as a
         left join sys_user on sys_user.user_id = a.third_party_id left join acceptance as c on a.application_id = c.application_id and sys_user.user_id = c.accept_organisation
 				left join application on application.application_id = c.application_id
-        where a.application_id=#{applicationId}
+        where a.application_id=#{applicationId} and name IS NOT NULL
     </select>
 
     <update id="changeStatus">
@@ -87,6 +87,10 @@ order by ISNULL(hlStatus), hlStatus asc
         from acceptance
         where acceptance_id = #{acceptanceId}
     </select>
+    <select id="getApplicationStatus" resultType="java.lang.Integer">
+        select application.status from acceptance left join  application using(application_id)
+        where acceptance_id = #{acceptanceId}
+    </select>
     <update id="addStatus">
         update acceptance
         set status = status + 1
@@ -96,5 +100,11 @@ order by ISNULL(hlStatus), hlStatus asc
         update acceptance
         set auditor_two=#{userId},auditor_two_result=#{result},auditor_two_time=#{date}
         where acceptance_id=#{acceptanceId}
+    </update>
+    <update id="setAuditOne">
+        update acceptance set bmsh = #{id}
+    </update>
+    <update id="setAuditTwo">
+        update acceptance set bmsh = #{zgsh}
     </update>
 </mapper>

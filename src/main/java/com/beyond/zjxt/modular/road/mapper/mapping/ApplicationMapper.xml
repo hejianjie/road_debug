@@ -310,6 +310,9 @@
     <update id="supremoAutoAudit">
         update application set supremo_status='同意',status=8,supremo_id=#{userId},supremo_audit_date=#{auditDate} where appraisal_cost &lt;=#{limitMoney} and city_dept_head_status='同意' and application.city_executive_status='同意' and supremo_status is null
     </update>
+    <update id="updateStatus">
+        update application set status = status + 1 where application_id = #{applicationId}
+    </update>
 
     <select id="supremoAuditHistory" resultType="map">
         with tmp as (  select  application.supremo_audit_date,application.status,application.application_id as applicationId,construct_project_detail1.construct_project_detail_name as projectName,construct_project_detail2.construct_project_detail_name as detailName,application.road_hazard as roadHazardId,application.apply_time as applyTime,construct_type.construct_type_name as constructName,sys_user.name as applyerName

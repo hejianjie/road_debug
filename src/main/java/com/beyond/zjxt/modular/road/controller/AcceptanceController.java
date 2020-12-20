@@ -135,7 +135,7 @@ public class AcceptanceController {
      * 查看核量列表页面
      */
     @RequestMapping("/FindAudit/{acceptanceId}/{roadHazardId}")
-    public String selectPendingQuantityIndex(@PathVariable String acceptanceId,@PathVariable int roadHazardId, Model model){
+    public String selectPendingQuantityIndex(@PathVariable String acceptanceId,@PathVariable int roadHazardId,@RequestParam(value = "check",required = false) String check, Model model){
         System.out.println(roadHazardId);
         Map roadHazard = road_hazardService.selectRoadHazardByroadHazardId(roadHazardId);
         model.addAttribute("roadHazard",roadHazard);
@@ -145,7 +145,7 @@ public class AcceptanceController {
         String detect_time= roadHazard.get("detect_time").toString();
         detect_time= (String) detect_time.subSequence(0,19);
         model.addAttribute("detect_time",detect_time);
-
+        int status = acceptanceService.getApplicationStatus(acceptanceId);
         List<Map<String,Object>> imgList = roadHazardImgService.selectByRoadHazardId(roadHazardId);
         model.addAttribute("hazardImgs",imgList);
         int acId = Integer.valueOf(acceptanceId);
@@ -153,6 +153,12 @@ public class AcceptanceController {
         ShiroUser user =  ShiroKit.getUser();
         model.addAttribute("userId",user.getId());
         System.out.println("-------------------------------------"+acceptanceId);
+        if (check == null) {
+            model.addAttribute("checkA", 2);
+        } else {
+            model.addAttribute("checkA", 1);
+        }
+        model.addAttribute("status", status);
         return "/modular/system/audit/county_check.html";
     }
     /**
@@ -274,6 +280,11 @@ public class AcceptanceController {
     @ResponseBody
     public Object changeStatus(@RequestParam("applicationId")int applicationId,@RequestParam("userId")int userId){
         return acceptanceService.changeStatus(applicationId,userId);
+    }
+
+    @RequestMapping("/ZGPendingQuantityIndex")
+    public String ZGPendingQuantityIndex() {
+        return "/modular/system/PendingQuantity/zg_selectPendingQuantity.html";
     }
 }
 

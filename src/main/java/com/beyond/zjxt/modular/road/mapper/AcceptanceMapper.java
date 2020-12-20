@@ -44,4 +44,10 @@ public interface AcceptanceMapper extends BaseMapper<Acceptance> {
     Page<Map<String,Object>> getByApplicationId(@Param("page")Page page,@Param("applicationId")int applicationId);
 
     int addStatus(@Param("acceptanceId")int acceptanceId);
+
+    int getApplicationStatus(@Param("acceptanceId") String acceptanceId);
+
+    void setAuditOne(@Param("id") Long id);
+
+    void setAuditTwo(@Param("id") Long id);
 }

@@ -544,8 +544,8 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
         return [[
             {field: 'zizeng',  title: '序号',type:'numbers'},
             {field:'money',title:'核量单位',templet:function (d) {
-                return d.name
-            }},
+                    return d.name
+                }},
             {field: 'patrolResultId', hide: true, sort: true, title: 'id',templet:function (d) {
                     if (d.patrolResultId==1){
                         return 'ID：'+ d.patrolResultId +'，标题：<span style="color: #c00;">'+ d.title +'</span>'
@@ -679,7 +679,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                 type: 2,
                 title: '第三方核量',
                 area: ['1000px', '800px'],
-                content: Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptance_id+'/'+data.road_hazard_id+'?check=1',
+                content: Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptance_id+'/'+data.road_hazard_id+'?check=2',
                 end: function () {
                     admin.getTempData('formOk');
                     table.reload(roadHazardCountyFirstTrialList.tableId);
@@ -767,7 +767,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
 
     //核量审核通过
     $("#passBtn").click(function () {
-        var ajax = new $ax(Feng.ctxPath + "/application/updateStatus?applicationId="+applicationId + "&check=1", function (data) {
+        var ajax = new $ax(Feng.ctxPath + "/application/updateStatus?applicationId="+applicationId +"&check=2", function (data) {
             Feng.success("操作成功！");
         }, function (data) {
             Feng.error("操作失败！" + data.responseJSON.message)

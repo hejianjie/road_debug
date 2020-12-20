@@ -82,4 +82,19 @@ public class AcceptanceServiceImpl extends ServiceImpl<AcceptanceMapper, Accepta
     public int addStatus(int acceptanceId) {
         return this.baseMapper.addStatus(acceptanceId);
     }
+
+    @Override
+    public int getApplicationStatus(String acceptanceId) {
+        return this.baseMapper.getApplicationStatus(acceptanceId);
+    }
+
+    @Override
+    public void setAuditOne(Long id) {
+        this.baseMapper.setAuditOne(id);
+    }
+
+    @Override
+    public void setAuditTwo(Long id) {
+        this.baseMapper.setAuditTwo(id);
+    }
 }

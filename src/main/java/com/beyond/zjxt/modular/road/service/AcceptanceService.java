@@ -33,4 +33,10 @@ public interface AcceptanceService extends IService<Acceptance> {
     Page<Map<String,Object>> getByApplicationId(int applicationId);
 
     int addStatus(int acceptanceId);
+
+    int getApplicationStatus(String acceptanceId);
+
+    void setAuditOne(Long id);
+
+    void setAuditTwo(Long id);
 }

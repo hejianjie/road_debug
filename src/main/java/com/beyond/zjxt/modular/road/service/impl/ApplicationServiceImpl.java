@@ -4,12 +4,15 @@ import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.beyond.zjxt.core.common.exception.BizExceptionEnum;
 import com.beyond.zjxt.core.common.page.LayuiPageFactory;
+import com.beyond.zjxt.core.shiro.ShiroKit;
 import com.beyond.zjxt.modular.road.entity.Application;
 import com.beyond.zjxt.modular.road.mapper.ApplicationMapper;
+import com.beyond.zjxt.modular.road.service.AcceptanceService;
 import com.beyond.zjxt.modular.road.service.ApplicationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.math.BigDecimal;
@@ -31,7 +34,8 @@ import java.util.Date;
  */
 @Service
 public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Application> implements ApplicationService {
-
+    @Autowired
+    AcceptanceService acceptanceService;
     @Override
     public Object selectOne(int applicationId) {
         System.out.println("===============================");
@@ -199,5 +203,17 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
     @Override
     public List<Map<String, Object>> cityExport(Date yearMonth, int[] nationHighway) {
         return this.baseMapper.cityExport(yearMonth, nationHighway);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(int applicationId, String check) {
+        Long id = ShiroKit.getUser().getId();
+        if (check.equals("1")) {
+            acceptanceService.setAuditOne(id);
+        } else {
+            acceptanceService.setAuditTwo(id);
+        }
+        this.baseMapper.updateStatus(applicationId);
     }
 }
