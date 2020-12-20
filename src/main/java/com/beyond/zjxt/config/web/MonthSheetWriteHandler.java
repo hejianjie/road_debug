@@ -70,7 +70,7 @@ public class MonthSheetWriteHandler implements SheetWriteHandler {
             Row sheet1Row = sheet1.createRow(0);
             sheet1Row.setHeight((short) 800);
             Cell sheet1RowCell = sheet1Row.createCell(0);
-            sheet1RowCell.setCellValue(year + "年甘井子区干线公路小修工程完成情况明细表(" + month + "月份）");
+            sheet1RowCell.setCellValue(year + "年" + dept +"干线公路小修工程完成情况明细表(" + month + "月份）");
             sheet1RowCell.setCellStyle(cellStyle);
             sheet1.addMergedRegionUnsafe(new CellRangeAddress(0, 0, 0, 20));
             //设置填表日期,填报人,联系方式

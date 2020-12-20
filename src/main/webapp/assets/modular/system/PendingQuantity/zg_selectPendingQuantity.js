@@ -84,14 +84,14 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
 
         //window.location.href=Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptanceId+'/'+data.road_hazard_id;
         console.log(data.acceptanceId)
-        console.log(data.road_hazard_id)
+        console.log("第一步");
         //window.location.href=Feng.ctxPath+'/roadhazard?patrolResultId='+data.patrolResultId;
         admin.putTempData('formOk', false);
         top.layui.admin.open({
             type: 2,
             title: '核量审批',
             area: ['1000px', '800px'],
-            content: Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptanceId+'/'+data.road_hazard_id ,
+            content: Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptanceId+'/'+data.road_hazard_id +'?check=2' ,
             end: function () {
                 admin.getTempData('formOk') && table.reload(roadHazardCountyFirstTrialList.tableId);
             }

@@ -154,11 +154,17 @@ public class AcceptanceController {
         model.addAttribute("userId",user.getId());
         System.out.println("-------------------------------------"+acceptanceId);
         if (check == null) {
-            model.addAttribute("checkA", 2);
+            model.addAttribute("checkA", 100);
         } else {
-            model.addAttribute("checkA", 1);
+            model.addAttribute("checkA", check);
         }
         model.addAttribute("status", status);
+        if (check != null) {
+            if (check.equals("2")||check.equals("3")) {
+                model.addAttribute("checkA", check);
+                return "/modular/system/audit/zg_county_check.html";
+            }
+        }
         return "/modular/system/audit/county_check.html";
     }
     /**

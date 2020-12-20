@@ -782,6 +782,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'showInfo') {
+            console.log("部门部门部门")
             appraisal.showInfo(data);
 
         }

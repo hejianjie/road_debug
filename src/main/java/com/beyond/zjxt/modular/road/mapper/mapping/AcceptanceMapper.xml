@@ -105,6 +105,6 @@ order by ISNULL(hlStatus), hlStatus asc
         update acceptance set bmsh = #{id}
     </update>
     <update id="setAuditTwo">
-        update acceptance set bmsh = #{zgsh}
+        update acceptance set zgsh = #{id}
     </update>
 </mapper>

@@ -671,7 +671,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
     })
 
     appraisal.showInfo = function (data) {
-        console.log(data)
+        console.log("主管啊啊啊啊啊啊啊")
         if(data.audit_time){
             //window.location.href=Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptanceId+'/'+data.road_hazard_id;
             admin.putTempData('formOk', false);
@@ -679,7 +679,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                 type: 2,
                 title: '第三方核量',
                 area: ['1000px', '800px'],
-                content: Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptance_id+'/'+data.road_hazard_id+'?check=2',
+                content: Feng.ctxPath+'/acceptance/FindAudit/'+data.acceptance_id+'/'+data.road_hazard_id+'?check=3',
                 end: function () {
                     admin.getTempData('formOk');
                     table.reload(roadHazardCountyFirstTrialList.tableId);
@@ -782,6 +782,7 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'showInfo') {
+            console.log("787487878787878787878787")
             appraisal.showInfo(data);
 
         }

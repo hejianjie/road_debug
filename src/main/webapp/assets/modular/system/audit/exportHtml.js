@@ -7,26 +7,23 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     var laydate = layui.laydate;
     var admin = layui.admin;
     var $ = layui.$;
-    layer.open({
-            title: "请选择年月",
-            content: "<div class=\"layui-inline\">\n" +
-                "                                <input id=\"yearMonth\" class=\"layui-input\" type=\"text\" placeholder=\"选择时间\"/>\n" +
-                "                            </div>",
-            btn: ["确定", "取消"],
-            yes: function (index, layero) {
-                var time = $("#yearMonth").val() + "-01";
-
-                window.location.href = Feng.ctxPath + "/export/exportSummaryOfMinorRepair?yearMonth=" + time;
-                layer.close(index);
-            },
-            btn2: function (index, layero) {
-                layer.close(index);
-            }
-        })
         //渲染时间选择框
         laydate.render({
             elem: '#yearMonth',
             type: 'month',
             max: Feng.currentDate()
         });
+    $("#exportBtn").click(function () {
+        var time = $("#yearMonth").val() + "-01";
+
+        if (time.length == 0) {
+            layer.open({
+                title: "提示",
+                content: "请选择时间"
+            })
+        } else {
+            window.location.href = Feng.ctxPath + "/export/exportSummaryOfMinorRepair?yearMonth=" + time;
+        }
+
+    });
 });

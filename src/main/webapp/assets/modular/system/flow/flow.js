@@ -30,8 +30,12 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
         contentType: "application/json; charset=utf-8",
         success: function (data) {
             console.log(data)
-            current=data-1
+            current=data-1;
+            if (current>=13) {
+                current = current - 1;
+            }
             $.each(list, function (index, item) {
+                console.log("index",index)
                 if(index<12){
                     if(index<current){
                         $("#contentBox").append(
@@ -56,13 +60,21 @@ layui.use(['layer', 'form', 'ztree', 'laydate', 'admin', 'ax', 'table', 'treetab
                         )
                     }
                 }else{
-                    if(index==current){
+                    if(index==current && index != 12){
                         $("#contentBox").append(
                             `<div style="display: inline-block;float: left;width: 120px;margin:10px 0;">
                                 <button type="button" class="layui-btn layui-btn-normal" style="height: 35px;width: 160px;border-radius:10px;">${index+1}.${item.title}</button>
                             </div>`
                          )
-                    }else{
+                    }else if (index==current && index == 12 && data == 14) {
+                        $("#contentBox").append(
+                            `<div style="display: inline-block;float: left;width: auto;margin:10px 0;">
+                                <button type="button" class="layui-btn" style="height: 35px;width: 160px;border-radius:10px;">${index+1}.${item.title}</button>
+                                <div style="display: inline-block;width: 30px;height: 1px;background-color: #000000;margin:0 5px;"></div>
+                             </div>`
+                        )
+                    }
+                    else{
                         $("#contentBox").append(
                             `<div style="display: inline-block;float: left;width: 120px;margin:10px 0;">
                                 <button type="button" class="layui-btn layui-btn-primary" style="height: 35px;width: 160px;border-radius:10px;">${index+1}.${item.title}</button>

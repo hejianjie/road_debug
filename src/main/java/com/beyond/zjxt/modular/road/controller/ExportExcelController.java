@@ -125,14 +125,14 @@ public class ExportExcelController {
                 head.setFinSpecificSize(finSpecificSize.replace(",", "*"));
                 head.setFinUnit((String) data.get(i - 1).get("finUnit"));
                 head.setFinUnitPrice((BigDecimal) data.get(i - 1).get("finUnitPrice"));
-//                if (data.get(i - 1).get("beforeImg") != null) {
-//                    String beforeImg = imgUrl + data.get(i - 1).get("beforeImg");
-//                    head.setBeforeImg(beforeImg);
-//                }
-//                if (data.get(i - 1).get("afterImg") != null) {
-//                    String afterImg = imgUrl + data.get(i - 1).get("afterImg");
-//                    head.setAfterImg(afterImg);
-//                }
+                if (data.get(i - 1).get("beforeImg") != null) {
+                    String beforeImg = imgUrl + data.get(i - 1).get("beforeImg");
+                    head.setBeforeImg(beforeImg);
+                }
+                if (data.get(i - 1).get("afterImg") != null) {
+                    String afterImg = imgUrl + data.get(i - 1).get("afterImg");
+                    head.setAfterImg(afterImg);
+                }
             }
 
             list.add(summaryOfMinorRepairsHead);
@@ -142,7 +142,7 @@ public class ExportExcelController {
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
 // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-        String fileName = URLEncoder.encode("haha", "UTF-8");
+        String fileName = URLEncoder.encode("公路维修情况表", "UTF-8");
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
 //内容样式策略
         WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
