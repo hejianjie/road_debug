@@ -83,4 +83,6 @@ public interface ApplicationMapper extends BaseMapper<Application> {
     List<Map<String, Object>> cityExport(@Param("yearMonth") Date yearMonth, @Param("nationHighway") int[] nationHighway);
 
     void updateStatus(@Param("applicationId") int applicationId);
+
+    void statusToNext(@Param("applicationId") int applicationId);
 }

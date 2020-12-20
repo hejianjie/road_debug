@@ -272,6 +272,7 @@ public class AcceptanceController {
         map.put("msg", "SUCCESS");
         map.put("data",num);
         acceptanceService.changeStatus(saveAcceptanceDTO.getApplicationId(),saveAcceptanceDTO.getAcceptOrganisation());
+        applicationService.statusToNext(saveAcceptanceDTO.getApplicationId());
         return map;
     }
 

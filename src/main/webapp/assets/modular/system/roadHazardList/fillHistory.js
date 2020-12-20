@@ -66,8 +66,10 @@ layui.use(['table', 'admin', 'ax', 'ztree','laydate','form',"jquery","cascader"]
                     case 11:
                         return "验收核量"
                     case 12:
-                        return "验收核量"
+                        return "市级部门初审"
                     case 13:
+                        return "主管领导审核"
+                    case 14:
                         return "已结束"
 
 

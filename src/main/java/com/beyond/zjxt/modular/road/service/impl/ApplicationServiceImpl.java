@@ -216,4 +216,9 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
         }
         this.baseMapper.updateStatus(applicationId);
     }
+
+    @Override
+    public void statusToNext(Integer applicationId) {
+        this.baseMapper.statusToNext(applicationId);
+    }
 }

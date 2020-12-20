@@ -84,4 +84,6 @@ public interface ApplicationService extends IService<Application> {
     List<Map<String, Object>> cityExport(Date yearMonth, int[] nationHighway);
 
     void updateStatus(int applicationId, String check);
+
+    void statusToNext(Integer applicationId);
 }
